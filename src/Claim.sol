@@ -43,7 +43,9 @@ contract Claim {
      *@dev blockStart - the block number that the reward event starts at
      *@dev blockEnd - the block number that the reward event ends at
      *@dev rewardAmount - the amount of ETH
-     *@dev */
+     *@dev nfts - total amount of different NFTs
+     *@dev
+     */
     struct RewardEvent {
         address nftContract;
         address rewardToken;
@@ -52,7 +54,7 @@ contract Claim {
         uint startBlock;
         uint endBlock;
         uint rewardAmount;
-        uint holders;
+        uint nfts;
         uint eventId;
     }
 
@@ -179,7 +181,7 @@ contract Claim {
         uint _blockStart,
         uint _blockEnd,
         uint _rewardAmount,
-        uint _holders
+        uint _nfts
     ) public {
         // if event period is over, root has to be set
         if (block.number > _blockEnd && _root == 0) {
@@ -196,7 +198,7 @@ contract Claim {
                 _blockStart,
                 _blockEnd,
                 _rewardAmount,
-                _holders,
+                _nfts,
                 eventMap.length
             )
         );

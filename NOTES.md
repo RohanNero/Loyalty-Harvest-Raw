@@ -55,6 +55,13 @@ If an NFT wasn't sold during the period it earned the maximum amount of rewards.
 If an NFT gets sold at 50% of the reward period completion, it gets 50% of the rewards.
 These rewards are only allowed to be claimed by the address that held the NFT from the start of the contest --> end/sell time.
 
+1.  calculate the total amount of percentage users could earn
+    - for example if there are 1000 NFTs, each nft could earn its holder 0.1% of the reward
+2.  calculate the amount of the total reward the user has earned
+    - for example if a user held their NFT for 50% of the reward period, they earned 50% of their max percentage, 0.1% would mean 0.05%.
+3.  transfer the calculated amount to the user
+    - for example, if a `reward event` was 1 eth in prize, a user who held one NFT for 50% of the time gets 0.005 ether.
+
 ## Question
 
 What if a contest allowed any address to claim the reward as long as they had the proof created by a leaf and the root, but then the transaction failed to out of gas, would a bot be able to pick this transaction up and steal the funds by copying the input?
@@ -114,3 +121,11 @@ Claim()
 1. `createLeaves` script to search contract from blockStart to blockEnd
 2. `viewHeldUntil` script that allows users to view the block they held their NFT until
 3.
+
+## Left off
+
+9/8 notes:
+
+1. I just set up the ECDSA recover logic, now need to create the leaf in solidity using the input (so user doesn't have to provide leaf)
+2. Now that you have the leaf, call verify and ensure that the proof is valid
+3. reward calculation time
