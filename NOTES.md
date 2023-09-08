@@ -59,6 +59,17 @@ These rewards are only allowed to be claimed by the address that held the NFT fr
 
 What if a contest allowed any address to claim the reward as long as they had the proof created by a leaf and the root, but then the transaction failed to out of gas, would a bot be able to pick this transaction up and steal the funds by copying the input?
 
+How does the `reward event` admin know exactly how much rewards were earned?
+Are the rewards based on percentage of a total amount?
+
+- if so, the math would be:
+  1.  calculate the total amount of percentage users could earn
+      - for example if there are 1000 NFTs, each nft could earn its holder 0.1% of the reward
+  2.  calculate the amount of the total reward the user has earned
+      - for example if a user held their NFT for 50% of the reward period, they earned 50% of their max percentage, 0.1% would mean 0.05%.
+  3.  transfer the calculated amount to the user
+      - for example, if a `reward event` was 1 eth in prize, a user who held one NFT for 50% of the time gets 0.005 ether.
+
 ## perspective
 
 A smart contract holds 1 Ether in rewards for anyone who holds an NFT from x to z. If you sell before z, at y, you can still earn rewards, but only 50% of the amount you would've received for holding the entire duration.
@@ -90,3 +101,16 @@ To keep it simple this first prototype will just send you 1 GWEI for every block
 3. user calls `claim` with the signed message, and their proof.
 4. Using ECDSA recover, we need to view the address that signed the message, as well as the data in the message.
 5. After confirming the signer is the owner of the `tokenId` in the message data, we need to confirm their `proof` is valid.
+
+## Claim function
+
+Claim()
+
+- `proof`
+- `id`
+
+## Additional files/scripts needed
+
+1. `createLeaves` script to search contract from blockStart to blockEnd
+2. `viewHeldUntil` script that allows users to view the block they held their NFT until
+3.

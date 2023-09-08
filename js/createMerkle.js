@@ -5,6 +5,9 @@ const keccak256 = require("keccak256");
 const env = require("dotenv");
 const { claimAbi } = require("../abi/Claim.json");
 const { NftAbi } = require("../abi/NFT.json");
+const { StandardMerkleTree } = require("@openzeppelin/merkle-tree");
+const fs = require("fs");
+
 const url =
   "https://eth-sepolia.g.alchemy.com/v2/" + process.env.SEPOLIA_RPC_URL;
 
@@ -21,57 +24,22 @@ const web3 = new Web3(url); // Replace with your Ethereum node URL
 // 7. users call claim() function in smart contract with `root`, `proof`, and `leaf` to get their reward.
 
 async function main() {
-  //const leaves = ["0-100", "1-75", "2-100", "3-100", "4-50", "5-100", "7-100"];
+  // Example leaves for testing, realistically, this script will take in an array as input with the true leaves
+  // the leaves will be created in a seperate script `createLeaves`, this script will take input such as blockStart, blockEnd, contractAddress
+  // other likely input parameters would be the path to where the tree json file will be written
+  // and an array of strings that describe the leaf variable types
+  const leaves = [
+    ["0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E", "0", "0"],
+    ["0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E", "1", "0"],
+    ["0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E", "2", "0"],
+  ];
 
-  class Leaf {
-    constructor(ownerAddress = "", nftId = 0, heldUntil = 0) {
-      this.ownerAddress = ownerAddress;
-      this.nftId = nftId;
-      this.heldUntil = heldUntil;
-    }
-
-    toString() {
-      return `${this.ownerAddress}-${this.nftId}-${this.heldUntil}`;
-    }
-  }
-
-  // Create instances of the Leaf class and convert them to strings
-  const customLeaf0 = new Leaf(
-    "0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E", // holder address
-    0, // tokenId
-    0 // heldUntil (block number)
-  ).toString();
-  const customLeaf1 = new Leaf(
-    "0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E", // holder address
-    1, // tokenId
-    0 // heldUntil (block number)
-  ).toString();
-  const customLeaf2 = new Leaf(
-    "0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E", // holder address
-    2, // tokenId
-    0 // heldUntil (block number)
-  ).toString();
-
-  const leaves = [customLeaf0, customLeaf1, customLeaf2];
-
-  const merkleTree = new MerkleTree(
-    leaves.map((leaf) => keccak256(leaf)),
-    keccak256,
-    { sortPairs: true }
-  );
-  console.log("tree:", merkleTree);
-
-  const root = "0x" + merkleTree.getHexRoot();
-  console.log("root:", root);
-
-  // Now you can set the Merkle root on your Claim contract
-  const sender = "0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E"; // The address with admin privileges
-  const privateKey = process.env.PRIVATE_KEY; // The private key of the admin
-  const provider = new ethers.providers.JsonRpcProvider(
-    process.env.SEPOLIA_RPC_URL
-  );
-
-  console.log(`Merkle root set: ${root}`);
+  // Create the merkle tree and explicitly state the structure of the leaves
+  const tree = StandardMerkleTree.of(leaves, ["address", "uint256", "uint256"]);
+  // log the root
+  console.log("Merkle Root:", tree.root);
+  // write the entire tree to a json file at the specified path
+  fs.writeFileSync("trees/tree_00.json", JSON.stringify(tree.dump()));
 }
 
 main();
