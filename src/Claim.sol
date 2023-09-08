@@ -2,6 +2,7 @@
 pragma solidity ^0.8.13;
 
 import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 error Claim__RewardsPeriodHasntEnded();
 error Claim__AlreadyClaimed();
@@ -133,11 +134,11 @@ contract Claim {
             revert Claim__InvalidSigner();
         }
 
-        // UPDATED PORTION OF LOGIC ENDS HERE, EVERYTHING BELOW NEEDS UPDATING
-
         // Calculate the user's `leaf` hash
         bytes32 leaf = keccak256(
-            abi.encodePacked(msg.sender, tokenId, heldUntil)
+            bytes.concat(
+                keccak256(abi.encode(holder, tokenId, eventId, heldUntil))
+            )
         );
 
         // Use MerkleProof lib to verify proof with root and leaf
@@ -152,27 +153,60 @@ contract Claim {
             revert Claim__InvalidProof();
         }
 
-        // Calculate how much rewards the user has earned
-        // duration - 100 seconds
-        // heldUntil - 50 seconds
-        // 50 / 100 = 0.5 amount of the rewards
-        // add 8 0s to the end of the number for solidity math purposes
-        uint adjustedDuration = viewRewardPeriodDuration() * 10 ** 8;
-        uint adjustedHeld = viewHeldTime(heldUntil) * 10 ** 8;
-        uint portion = adjustedHeld / adjustedDuration;
-        uint eligibleFor = (maxReward * portion) / 10 ** 8;
+        // UPDATED PORTION OF LOGIC ENDS HERE, EVERYTHING BELOW NEEDS UPDATING
 
-        // send the `eligibleFor` amount of ETH to the caller
-        (bool success, ) = msg.sender.call{value: eligibleFor}("");
-        if (success) {
-            return (eligibleFor);
-        } else {
-            revert Claim__RewardTransferFailed();
+        // Reward calculation
+
+        // calculate maxPortion that an NFT could earn its holder
+        // 1 Ether / 10 nfts = 0.1 ether per NFT
+        // maxPortion uses 6 decimals
+        uint maxPortion = (eventMap[eventId].rewardAmount * 10 ** 6) /
+            eventMap[eventId].nfts;
+
+        // calculate what percent of the maxPortion they should get
+        // total = 100, blocksHeld = 77
+        // percent = blocksHeld / total
+        uint totalBlocks = eventMap[eventId].endBlock -
+            eventMap[eventId].startBlock;
+        uint blocksHeld = heldUntil - eventMap[eventId].startBlock;
+        uint percent = (blocksHeld * 10 ** 8) / totalBlocks;
+
+        // now that we know the maxPortion they could get, lets see how much they actually earned
+        uint portion = (maxPortion * percent) / 1e12;
+
+        // Now that we know the `portion` is, we can send it to the user
+
+        // transfer ETH if rewardToken isn't set
+        if (eventMap[eventId].rewardToken == address(0)) {
+            (bool success, ) = to.call{value: portion}("");
+            // ensure call went through
+            if (!success) {
+                revert Claim__RewardTransferFailed();
+            }
+        }
+        // Transfer token if its an ERC20
+        else {
+            bool success = IERC20(eventMap[eventId].rewardToken).transfer(
+                to,
+                portion
+            );
+            if (!success) {
+                revert Claim__RewardTransferFailed();
+            }
         }
     }
 
     /**@notice anyone can call this function to create a reward event
-     *@dev _root may be set to 0 if waiting until reward period to add */
+     *@dev _root may be set to 0 if waiting until reward period to add
+     *@param _nftContract is the ERC-721 contract associated with the Reward Event
+     *@param _rewardToken is the token to be sent as rewards
+     *@param _organizer is the address that created the Reward Event
+     *@param _root is the Merkle Root of the Reward Event
+     *@param _blockStart is the block number that the Reward Event started at
+     *@param _blockEnd is the block number that the Reward Event ended at
+     *@param _rewardAmount is the amount of reward token to be sent to the holders
+     *@param _nfts is the total amount of NFTs
+     */
     function createRewardEvent(
         address _nftContract,
         address _rewardToken,
@@ -211,11 +245,7 @@ contract Claim {
         return endTime - startTime;
     }
 
-    /**@notice retursn the duration that a user held an NFT for in seconds */
-    function viewHeldTime(uint heldUntil) public view returns (uint) {
-        return heldUntil - startTime;
-    }
-
+    /**@notice recovers the signer */
     function recoverSigner(
         bytes32 _signedMessageHash,
         bytes memory _signature

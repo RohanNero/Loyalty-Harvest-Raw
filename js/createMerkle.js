@@ -36,6 +36,8 @@ async function main() {
 
   // Create the merkle tree and explicitly state the structure of the leaves
   const tree = StandardMerkleTree.of(leaves, ["address", "uint256", "uint256"]);
+
+  console.log("tree:", tree);
   // log the root
   console.log("Merkle Root:", tree.root);
   // write the entire tree to a json file at the specified path
