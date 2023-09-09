@@ -12,3 +12,13 @@ docs/
 
 # Dotenv file
 .env
+
+# Secret plans
+NOTES.md
+
+
+# Modules
+node_modules/
+
+# Broadcast
+broadcast/

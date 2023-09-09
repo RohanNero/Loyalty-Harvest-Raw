@@ -205,7 +205,7 @@ contract Claim {
      *@param _blockStart is the block number that the Reward Event started at
      *@param _blockEnd is the block number that the Reward Event ended at
      *@param _rewardAmount is the amount of reward token to be sent to the holders
-     *@param _nfts is the total amount of NFTs
+     *@param _nfts is the total amount of NFTs eligible for rewards
      */
     function createRewardEvent(
         address _nftContract,

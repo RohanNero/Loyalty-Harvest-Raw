@@ -129,3 +129,14 @@ Claim()
 1. I just set up the ECDSA recover logic, now need to create the leaf in solidity using the input (so user doesn't have to provide leaf)
 2. Now that you have the leaf, call verify and ensure that the proof is valid
 3. reward calculation time
+
+I've set up the logic discussed above, now it is time to test that it works:
+
+1. deploy the mock NFT contract on anvil
+2. deploy the Claim contract on anvil
+3. create a Reward Event with `createRewardEvent()` function
+4. call `claimWithSignature()` in claim contract
+
+After ensuring this flow works, I can then modify the `Claim` contract logic
+
+- possibly add a new `claim()` function that uses msg.sender as opposed to signature recover
