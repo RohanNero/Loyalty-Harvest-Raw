@@ -59,6 +59,20 @@ contract Claim {
         uint eventId;
     }
 
+    /**@notice used to avoid stack-too-deep error
+     *@param holder is the address that held the NFT
+     *@param to is the address that will be sent the rewards
+     *@param tokenId is the NFT's tokenId
+     *@param eventId is the `RewardEvent` index in the `eventMap`
+     *@param heldUntil is the block number the NFT was held until*/
+    struct ClaimInfo {
+        address holder;
+        address to;
+        uint tokenId;
+        uint eventId;
+        uint heldUntil;
+    }
+
     /**@notice array from eventId to RewardEvent */
     RewardEvent[] public eventMap;
 
@@ -90,27 +104,19 @@ contract Claim {
      *@dev this needs to use `MerkleProof` lib to verify that the caller can receieve funds
      *@param proof is an array of proofs that can be used to verifiy the user's claim
      *@param signature contains hash of holder, tokenId, eventId, heldUntil
-     *@param holder is the address that held the NFT
-     *@param to is the address that will be sent the rewards
-     *@param tokenId is the NFT's tokenId
-     *@param eventId is the `RewardEvent` index in the `eventMap`
-     *@param heldUntil is the block number the NFT was held until
+     *@param info is the ClaimInfo struct containing information about the claim
      */
     function claimWithSignature(
         bytes32[] memory proof,
         bytes memory signature,
-        address holder,
-        address to,
-        uint tokenId,
-        uint eventId,
-        uint heldUntil
+        ClaimInfo memory info
     ) public returns (uint) {
         // ensure the event has ended
-        if (block.number < eventMap[eventId].endBlock) {
+        if (block.number < eventMap[info.eventId].endBlock) {
             revert Claim__RewardsPeriodHasntEnded();
         }
         // ensure the user hasn't already claimed for this event and tokenId
-        if (claimMap[eventId][tokenId]) {
+        if (claimMap[info.eventId][info.tokenId]) {
             revert Claim__AlreadyClaimed();
         }
 
@@ -120,7 +126,12 @@ contract Claim {
 
         // create the message hash
         bytes32 messageHash = keccak256(
-            abi.encodePacked(holder, tokenId, eventId, heldUntil)
+            abi.encodePacked(
+                info.holder,
+                info.tokenId,
+                info.eventId,
+                info.heldUntil
+            )
         );
         // sign the message hash
         bytes32 signedMessageHash = keccak256(
@@ -130,21 +141,28 @@ contract Claim {
         address signer = recoverSigner(signedMessageHash, signature);
 
         // revert if signer address isn't the holder
-        if (signer != holder) {
+        if (signer != info.holder) {
             revert Claim__InvalidSigner();
         }
 
         // Calculate the user's `leaf` hash
         bytes32 leaf = keccak256(
             bytes.concat(
-                keccak256(abi.encode(holder, tokenId, eventId, heldUntil))
+                keccak256(
+                    abi.encode(
+                        info.holder,
+                        info.tokenId,
+                        info.eventId,
+                        info.heldUntil
+                    )
+                )
             )
         );
 
         // Use MerkleProof lib to verify proof with root and leaf
         bool verified = MerkleProof.verify(
             proof,
-            eventMap[eventId].merkleRoot,
+            eventMap[info.eventId].merkleRoot,
             leaf
         );
 
@@ -160,15 +178,15 @@ contract Claim {
         // calculate maxPortion that an NFT could earn its holder
         // 1 Ether / 10 nfts = 0.1 ether per NFT
         // maxPortion uses 6 decimals
-        uint maxPortion = (eventMap[eventId].rewardAmount * 10 ** 6) /
-            eventMap[eventId].nfts;
+        uint maxPortion = (eventMap[info.eventId].rewardAmount * 10 ** 6) /
+            eventMap[info.eventId].nfts;
 
         // calculate what percent of the maxPortion they should get
         // total = 100, blocksHeld = 77
         // percent = blocksHeld / total
-        uint totalBlocks = eventMap[eventId].endBlock -
-            eventMap[eventId].startBlock;
-        uint blocksHeld = heldUntil - eventMap[eventId].startBlock;
+        uint totalBlocks = eventMap[info.eventId].endBlock -
+            eventMap[info.eventId].startBlock;
+        uint blocksHeld = info.heldUntil - eventMap[info.eventId].startBlock;
         uint percent = (blocksHeld * 10 ** 8) / totalBlocks;
 
         // now that we know the maxPortion they could get, lets see how much they actually earned
@@ -177,8 +195,8 @@ contract Claim {
         // Now that we know the `portion` is, we can send it to the user
 
         // transfer ETH if rewardToken isn't set
-        if (eventMap[eventId].rewardToken == address(0)) {
-            (bool success, ) = to.call{value: portion}("");
+        if (eventMap[info.eventId].rewardToken == address(0)) {
+            (bool success, ) = info.to.call{value: portion}("");
             // ensure call went through
             if (!success) {
                 revert Claim__RewardTransferFailed();
@@ -186,8 +204,8 @@ contract Claim {
         }
         // Transfer token if its an ERC20
         else {
-            bool success = IERC20(eventMap[eventId].rewardToken).transfer(
-                to,
+            bool success = IERC20(eventMap[info.eventId].rewardToken).transfer(
+                info.to,
                 portion
             );
             if (!success) {

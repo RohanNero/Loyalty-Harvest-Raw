@@ -11,7 +11,6 @@ contract ClaimTest is Test {
         claim = new Claim();
     }
 
-  
     // function testFuzz_SetNumber(uint256 x) public {
     //     assertEq(claim.number(), x);
     // }

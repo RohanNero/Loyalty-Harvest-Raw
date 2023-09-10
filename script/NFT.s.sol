@@ -6,7 +6,6 @@ import {console2} from "forge-std/console2.sol";
 import {NFT} from "../src/NFT.sol";
 
 contract NFTScript is Script {
-
     function run() public {
         vm.startBroadcast(vm.envUint("PRIVATE_KEY"));
         NFT nft = new NFT("NonFun", "NFT");
