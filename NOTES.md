@@ -120,7 +120,7 @@ Claim()
 
 1. `createLeaves` script to search contract from blockStart to blockEnd
 2. `viewHeldUntil` script that allows users to view the block they held their NFT until
-3.
+3. `createSignature` script to allow users to create a `signature`, which is required to claim
 
 ## Left off
 
@@ -140,3 +140,15 @@ I've set up the logic discussed above, now it is time to test that it works:
 After ensuring this flow works, I can then modify the `Claim` contract logic
 
 - possibly add a new `claim()` function that uses msg.sender as opposed to signature recover
+
+9/10 notes:
+
+1. Add conditional inside `createRewardEvent()` to ensure the `organizer`/`msg.sender` has provided the funds required for the rewardEvent
+
+VR will only prevail if they continiously showcase exclusive options and experiences that traditional format simply cannot provide.
+
+2. For the signature passed to the `claimWithSignature` function, we are trying to allow users to `claim` from another account that isn't their main, while also having the rewards sent directly to whatever address they want.
+
+Left off setting up the `claimWithSignature()` test
+
+9/11 notes:

@@ -2,7 +2,7 @@ const Web3 = require("web3");
 const ethers = require("ethers");
 const { MerkleTree } = require("merkletreejs");
 const keccak256 = require("keccak256");
-const env = require("dotenv");
+require("dotenv").config();
 const { claimAbi } = require("../abi/Claim.json");
 const { NftAbi } = require("../abi/NFT.json");
 const { StandardMerkleTree } = require("@openzeppelin/merkle-tree");
@@ -28,14 +28,20 @@ async function main() {
   // the leaves will be created in a seperate script `createLeaves`, this script will take input such as blockStart, blockEnd, contractAddress
   // other likely input parameters would be the path to where the tree json file will be written
   // and an array of strings that describe the leaf variable types
+  // leaf consists of `holder`, `tokenId`, `eventId`, `heldUntil`
   const leaves = [
-    ["0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E", "0", "0"],
-    ["0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E", "1", "0"],
-    ["0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E", "2", "0"],
+    ["0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E", "0", "0", "110"],
+    ["0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E", "1", "0", "105"],
+    ["0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E", "2", "0", "100"],
   ];
 
   // Create the merkle tree and explicitly state the structure of the leaves
-  const tree = StandardMerkleTree.of(leaves, ["address", "uint256", "uint256"]);
+  const tree = StandardMerkleTree.of(leaves, [
+    "address",
+    "uint256",
+    "uint256",
+    "uint256",
+  ]);
 
   console.log("tree:", tree);
   // log the root

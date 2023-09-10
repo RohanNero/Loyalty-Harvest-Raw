@@ -125,14 +125,7 @@ contract Claim {
         // Recover the signer's address
 
         // create the message hash
-        bytes32 messageHash = keccak256(
-            abi.encodePacked(
-                info.holder,
-                info.tokenId,
-                info.eventId,
-                info.heldUntil
-            )
-        );
+        bytes32 messageHash = keccak256(abi.encodePacked(info.to));
         // sign the message hash
         bytes32 signedMessageHash = keccak256(
             abi.encodePacked("\x19Ethereum Signed Message:\n32", messageHash)
@@ -212,6 +205,7 @@ contract Claim {
                 revert Claim__RewardTransferFailed();
             }
         }
+        return portion;
     }
 
     /**@notice anyone can call this function to create a reward event
@@ -234,7 +228,7 @@ contract Claim {
         uint _blockEnd,
         uint _rewardAmount,
         uint _nfts
-    ) public {
+    ) public payable {
         // if event period is over, root has to be set
         if (block.number > _blockEnd && _root == 0) {
             revert Claim__MustProvideRootIfContestIsOver();
@@ -263,19 +257,31 @@ contract Claim {
         return endTime - startTime;
     }
 
-    /**@notice recovers the signer */
+    function viewEthBalance() public view returns (uint) {
+        return address(this).balance;
+    }
+
+    /**@notice returns length of `eventMap` */
+    function viewEventMapLength() public view returns (uint) {
+        return eventMap.length;
+    }
+
+    /**@notice recovers the signer
+     *@dev from SMP's signature recovery */
     function recoverSigner(
         bytes32 _signedMessageHash,
         bytes memory _signature
-    ) public pure returns (address) {
+    ) internal pure returns (address) {
         (bytes32 r, bytes32 s, uint8 v) = splitSignature(_signature);
 
         return ecrecover(_signedMessageHash, v, r, s);
     }
 
+    /**@notice splits the signature
+     *@dev from SMP's signature recovery */
     function splitSignature(
         bytes memory sig
-    ) public pure returns (bytes32 r, bytes32 s, uint8 v) {
+    ) internal pure returns (bytes32 r, bytes32 s, uint8 v) {
         require(sig.length == 65, "invalid signature length");
 
         assembly {

@@ -4,7 +4,7 @@ const fs = require("fs");
 async function main() {
   // grab the merkle tree from the specified path, this could potentially become an input param
   const tree = StandardMerkleTree.load(
-    JSON.parse(fs.readFileSync("trees/tree_01.json", "utf8"))
+    JSON.parse(fs.readFileSync("trees/tree_00.json", "utf8")),
   );
 
   // loop through the tree and find entries that match the target address
