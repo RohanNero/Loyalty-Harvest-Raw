@@ -3,8 +3,9 @@ pragma solidity ^0.8.13;
 
 import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {console2} from "forge-std/Test.sol";
 
-error Claim__RewardsPeriodHasntEnded();
+error Claim__RewardsPeriodHasntEnded(uint current, uint end);
 error Claim__AlreadyClaimed();
 error Claim__InvalidProof();
 error Claim__InvalidTimestamps();
@@ -14,30 +15,8 @@ error Claim__InvalidSigner();
 
 /**@title Claim
  *@author Rohan Nero
- *@notice this contract allows anyone claim rewards earned during a `reward period`
- *@dev root - 0x0xe4d847cc5eac373cd9f985335891478d60b2be66e1bb6bda7dc0c0685610fc6a */
+ *@notice this contract allows anyone claim rewards earned during a `reward period` */
 contract Claim {
-    /**@notice variables for reward period duration */
-    uint public startTime;
-    uint public endTime;
-
-    /**@notice maximum amount of rewards a user could receive
-     *@dev a user would have to have held the NFT the entire rewards period duration to get this */
-    uint public maxReward = 777e18;
-
-    /**@notice variables for Merkle Proof */
-
-    /**@notice users can calculate the Merkle Proof off-chain by inputting their leaf with the root
-     *@dev this won't be an actual contract variable since it varies by user, just here for dev */
-    //bytes32[] public proof;
-
-    /**@notice root - The Merkle root is the hash of all leaves in the Merkle tree */
-    bytes32 public root;
-
-    /**@notice leaf - The leaf hash is the hash of the user's data that you want to prove
-     *@dev this won't be an actual contract variable since it varies by user, just here for dev */
-    //bytes32 public leaf;
-
     /**@notice each struct outlines the details of a reward event
      *@dev nftContract - the ERC721 contract
      *@dev rewardToken - the current that reward will be in, set to 0 address to use ETH
@@ -81,25 +60,6 @@ contract Claim {
     mapping(uint eventId => mapping(uint tokenId => bool hasClaimed))
         public claimMap;
 
-    /**@notice admin would set these values, public for testing ease */
-    function setTimestamps(
-        uint id,
-        uint startTimestamp,
-        uint endTimestamp
-    ) public {
-        if (endTime < startTime + 3 days) {
-            revert Claim__InvalidTimestamps();
-        }
-        eventMap[id].startBlock = startTimestamp;
-        eventMap[id].endBlock = endTimestamp;
-    }
-
-    /**@notice admin would set this value, public for testing ease
-     *@dev to ensure transparency this should be publicly known and so should the entire Merkle tree */
-    function setRoot(bytes32 merkleRoot) public {
-        root = merkleRoot;
-    }
-
     /**@notice anyone would be able to claim after the endTime
      *@dev this needs to use `MerkleProof` lib to verify that the caller can receieve funds
      *@param proof is an array of proofs that can be used to verifiy the user's claim
@@ -113,7 +73,10 @@ contract Claim {
     ) public returns (uint) {
         // ensure the event has ended
         if (block.number < eventMap[info.eventId].endBlock) {
-            revert Claim__RewardsPeriodHasntEnded();
+            revert Claim__RewardsPeriodHasntEnded(
+                block.number,
+                eventMap[info.eventId].endBlock
+            );
         }
         // ensure the user hasn't already claimed for this event and tokenId
         if (claimMap[info.eventId][info.tokenId]) {
@@ -151,6 +114,13 @@ contract Claim {
                 )
             )
         );
+        console2.log("leaf:");
+        console2.logBytes32(leaf);
+        console2.log("root:");
+        console2.logBytes32(eventMap[info.eventId].merkleRoot);
+        console2.log("proof:");
+        console2.logBytes32(proof[0]);
+        console2.logBytes32(proof[1]);
 
         // Use MerkleProof lib to verify proof with root and leaf
         bool verified = MerkleProof.verify(
@@ -163,9 +133,6 @@ contract Claim {
         if (!verified) {
             revert Claim__InvalidProof();
         }
-
-        // UPDATED PORTION OF LOGIC ENDS HERE, EVERYTHING BELOW NEEDS UPDATING
-
         // Reward calculation
 
         // calculate maxPortion that an NFT could earn its holder
@@ -180,15 +147,17 @@ contract Claim {
         uint totalBlocks = eventMap[info.eventId].endBlock -
             eventMap[info.eventId].startBlock;
         uint blocksHeld = info.heldUntil - eventMap[info.eventId].startBlock;
-        uint percent = (blocksHeld * 10 ** 8) / totalBlocks;
+        uint percent = (blocksHeld * 10 ** 6) / totalBlocks;
 
         // now that we know the maxPortion they could get, lets see how much they actually earned
         uint portion = (maxPortion * percent) / 1e12;
+        console2.log("portion:", portion);
 
         // Now that we know the `portion` is, we can send it to the user
 
         // transfer ETH if rewardToken isn't set
         if (eventMap[info.eventId].rewardToken == address(0)) {
+            console2.log("transfer eth");
             (bool success, ) = info.to.call{value: portion}("");
             // ensure call went through
             if (!success) {
@@ -205,6 +174,7 @@ contract Claim {
                 revert Claim__RewardTransferFailed();
             }
         }
+        claimMap[info.eventId][info.tokenId] == true;
         return portion;
     }
 
@@ -253,8 +223,8 @@ contract Claim {
     /** View / pure functions */
 
     /**@notice returns the duration of the reward period in seconds */
-    function viewRewardPeriodDuration() public view returns (uint) {
-        return endTime - startTime;
+    function viewRewardPeriodDuration(uint eventId) public view returns (uint) {
+        return eventMap[eventId].endBlock - eventMap[eventId].startBlock;
     }
 
     function viewEthBalance() public view returns (uint) {

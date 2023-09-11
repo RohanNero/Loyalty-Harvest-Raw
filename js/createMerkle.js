@@ -1,6 +1,5 @@
 const Web3 = require("web3");
 const ethers = require("ethers");
-const { MerkleTree } = require("merkletreejs");
 const keccak256 = require("keccak256");
 require("dotenv").config();
 const { claimAbi } = require("../abi/Claim.json");
