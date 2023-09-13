@@ -58,9 +58,24 @@ async function createMerkle(leaves, structure) {
 
 createMerkle(
   [
-    ["0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E", "0", "0", "110"],
-    ["0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E", "1", "0", "105"],
-    ["0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E", "2", "0", "100"],
+    [
+      "0x52469E13ac6DdbFbf803F48E7106f8294E2B888f",
+      "0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E",
+      "0",
+      "110",
+    ],
+    [
+      "0x52469E13ac6DdbFbf803F48E7106f8294E2B888f",
+      "0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E",
+      "1",
+      "105",
+    ],
+    [
+      "0x52469E13ac6DdbFbf803F48E7106f8294E2B888f",
+      "0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E",
+      "2",
+      "100",
+    ],
   ],
-  ["address", "uint256", "uint256", "uint256"],
+  ["address", "address", "uint256", "uint256"],
 );

@@ -218,3 +218,46 @@ Under the hood:
 1. form calls `createLeaves` using input
 2. that calls `createMerkle`
 3. which in turn calls `createRewardEvent` on the `Claim.sol` contract
+
+9/13 notes:
+
+1. revise scripts to take input and then craete any additionally needed scripts
+
+Different flows discovered:
+
+NEED TO CREATE EVENT FIRST BECAUSE EVENTID IS A KEY ELEMENT OF THE LEAVES, DOES THIS MEAN OUR SYSTEM REQUIRES ORGANIZER TO MAKE TWO SEPERATE TX?
+
+You could argue that two seperate tx are inherit if you look at the protocol from this perspective:
+
+1. organizers publicly announce event and create `RewardEvent` on `Claim.sol`
+2. once reward period has ended, they update the event to include the `merkleRoot`
+3. users may now claim rewards
+
+Alt perspective:
+
+1. organizers publicly announce event
+2. once reward period has ended the organizer creates the `RewardEvent`
+3. organizer creates `merkleRoot` and passes it to the event
+4. users may now claim rewards
+
+**SOLUTION** `eventId` won't be based upon the `eventMap` length but instead upon the `organizer`'s specific eventId
+
+wait but lets rethink the leaf structure:
+Need a `nftAddress`, `tokenId`, `heldUntil`
+
+If event A uses 0x7, 7, and 7 as input
+
+and event B uses 0x7, 7, and 7, the input is the same, could this cause issues?
+
+other users can't steal the funds since we have `msg.sender` checks, any other issues present?
+
+Alright redesign the `leaf` structure to only include the barebones three variables listed above
+
+## IDEA for new project:
+
+reward event for stack exchange ethereum users
+
+This would read from stack exchange api to view user data such as rep and description
+to match eth address to stack exchange account, users will need to put their address in stack exchange desc
+
+Newst NFT deployment:
