@@ -219,6 +219,69 @@ Under the hood:
 2. that calls `createMerkle`
 3. which in turn calls `createRewardEvent` on the `Claim.sol` contract
 
+## Newest data
+
+nft contract sepolia:
+
+merkle root: 0xebd0338c2091ebb3e5aaab17c9c880689563fe74580addc55a1291d0abad6199
+
+leaves: at top of js/createMerkle.js and bottom of js/createLeaves.js
+
+proof: Value: [
+'0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E',
+'0x52469E13ac6DdbFbf803F48E7106f8294E2B888f',
+'0',
+'4283030'
+]
+Proof: [
+'0x1a2ebc620fac4381f362fbbbc78d804f51d5dbd8f2da853a45ac070b2ed7be4a',
+'0xe7cbbcb750ea571b385ae7d5a7b297734d0a666be991078b26d7c763ac1a04d1',
+'0x633c0c6915fcdb2ef3df589771dba71b13add953936783a02d6ba820b1028a20'
+]
+Value: [
+'0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E',
+'0x52469E13ac6DdbFbf803F48E7106f8294E2B888f',
+'1',
+'4283024'
+]
+Proof: [
+'0x6230c7deeba2e154b2c8504a9c2f623ca737cfebebcfb7ff662e46382bee5541',
+'0x2a8fbac61582387db781b04ab95494ef0c10fa2f463a24c7bfcf8a1532da2f2d'
+]
+Value: [
+'0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E',
+'0x52469E13ac6DdbFbf803F48E7106f8294E2B888f',
+'2',
+'4283030'
+]
+Proof: [
+'0x56cf7fd6c858777a9a0dfb29f4bc0a5724296f05470a2f2577e3c38ca88f8964',
+'0xe7cbbcb750ea571b385ae7d5a7b297734d0a666be991078b26d7c763ac1a04d1',
+'0x633c0c6915fcdb2ef3df589771dba71b13add953936783a02d6ba820b1028a20'
+]
+Value: [
+'0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E',
+'0x52469E13ac6DdbFbf803F48E7106f8294E2B888f',
+'3',
+'4283030'
+]
+Proof: [
+'0xfada35f7aff8960dc13a6b73c8d8c02718eb405666d9c3ffb0a4fa46b3067889',
+'0x633c0c6915fcdb2ef3df589771dba71b13add953936783a02d6ba820b1028a20'
+]
+Value: [
+'0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E',
+'0x52469E13ac6DdbFbf803F48E7106f8294E2B888f',
+'4',
+'4283030'
+]
+Proof: [
+'0x9353681c443b2f04714e33f4bfe53486dfb24049710d211ba5a6d1d91780aa43',
+'0x2a8fbac61582387db781b04ab95494ef0c10fa2f463a24c7bfcf8a1532da2f2d'
+]
+
+## Timeline notes
+
 9/13 notes:
 
 1. revise scripts to take input and then craete any additionally needed scripts
@@ -260,4 +323,4 @@ reward event for stack exchange ethereum users
 This would read from stack exchange api to view user data such as rep and description
 to match eth address to stack exchange account, users will need to put their address in stack exchange desc
 
-Newst NFT deployment:
+Newst

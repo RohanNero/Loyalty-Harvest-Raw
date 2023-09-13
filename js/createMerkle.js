@@ -3,19 +3,45 @@ const ethers = require("ethers");
 const keccak256 = require("keccak256");
 require("dotenv").config();
 const { claimAbi } = require("../abi/Claim.json");
-const { NftAbi } = require("../abi/NFT.json");
 const { StandardMerkleTree } = require("@openzeppelin/merkle-tree");
 const fs = require("fs");
 
 const url =
   "https://eth-sepolia.g.alchemy.com/v2/" + process.env.SEPOLIA_RPC_URL;
 
-const web3 = new Web3(url); // Replace with your Ethereum node URL
+const web3 = new Web3(url);
 
 // const leaves = [
-//   ["0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E", "0", "0", "110"],
-//   ["0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E", "1", "0", "105"],
-//   ["0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E", "2", "0", "100"],
+//   [
+//     "0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E",
+//     "0x52469E13ac6DdbFbf803F48E7106f8294E2B888f",
+//     "0",
+//     "4283030",
+//   ],
+//   [
+//     "0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E",
+//     "0x52469E13ac6DdbFbf803F48E7106f8294E2B888f",
+//     "1",
+//     "4283024",
+//   ],
+//   [
+//     "0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E",
+//     "0x52469E13ac6DdbFbf803F48E7106f8294E2B888f",
+//     "2",
+//     "4283030",
+//   ],
+//   [
+//     "0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E",
+//     "0x52469E13ac6DdbFbf803F48E7106f8294E2B888f",
+//     "3",
+//     "4283030",
+//   ],
+//   [
+//     "0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E",
+//     "0x52469E13ac6DdbFbf803F48E7106f8294E2B888f",
+//     "4",
+//     "4283030",
+//   ],
 // ];
 
 // This script is called after the reward period has ended
@@ -59,22 +85,34 @@ async function createMerkle(leaves, structure) {
 createMerkle(
   [
     [
-      "0x52469E13ac6DdbFbf803F48E7106f8294E2B888f",
       "0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E",
+      "0x52469E13ac6DdbFbf803F48E7106f8294E2B888f",
       "0",
-      "110",
+      "4283030",
     ],
     [
-      "0x52469E13ac6DdbFbf803F48E7106f8294E2B888f",
       "0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E",
+      "0x52469E13ac6DdbFbf803F48E7106f8294E2B888f",
       "1",
-      "105",
+      "4283024",
     ],
     [
-      "0x52469E13ac6DdbFbf803F48E7106f8294E2B888f",
       "0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E",
+      "0x52469E13ac6DdbFbf803F48E7106f8294E2B888f",
       "2",
-      "100",
+      "4283030",
+    ],
+    [
+      "0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E",
+      "0x52469E13ac6DdbFbf803F48E7106f8294E2B888f",
+      "3",
+      "4283030",
+    ],
+    [
+      "0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E",
+      "0x52469E13ac6DdbFbf803F48E7106f8294E2B888f",
+      "4",
+      "4283030",
     ],
   ],
   ["address", "address", "uint256", "uint256"],
