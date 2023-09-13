@@ -151,4 +151,70 @@ VR will only prevail if they continiously showcase exclusive options and experie
 
 Left off setting up the `claimWithSignature()` test
 
-9/11 notes:
+9/12 notes:
+
+The test was passing on 9/10, now its time to revise the smart contract before cleaning up all the scripts and throwing it together inside a frontend
+
+Thoughts for the future; how will RPC URL work? will we use a public one? or will users provide an api key and then use their own?
+
+TO DO:
+
+1.  clean up contract
+    - possibly add events later
+    - should I add `remainingRewards` variable to the `RewardEvent` struct?
+2.  clean up scripts
+
+    This is going to be a massive piece of the project - need to make all the scripts use input as opposed to hard-coded examples - need to create new scripts for features we currently lack
+
+         1. `createLeaves` script to search contract from blockStart to blockEnd
+            - block start record initial leafData excluding `heldUntil`
+            - search through the block duration for `Transfer` events
+                - record `heldUntil` for the `tokenId`s that were transferred
+            - finally for all leaves that still contain a `0` value for `heldUntil`, set it to the `blockEnd`
+         3. `viewHeldUntil` script that allows users to view the block they held their NFT until
+            - takes  nftAddress, `tokenId`, `blockStart`, and a `blockEnd`
+            - starting at `blockStart`, loop through duration to see if the `Transfer` event was fired for that specific `tokenId`
+            - again, if still `0` at the end of the loop, set the `heldUntil` value to the `blockEnd` value
+         4. `createSignature` script to allow users to create a `signature`, which is required to claim
+            - this is kinda done, still hard-coded values though
+            -
+
+3.  add frontend
+4.  connect the pieces
+
+Checklist:
+
+1. cleaned her up nicely
+   - still need to add events
+   - might add `remainingRewards` variable
+2. cleaned up partially
+
+   - `createSig`
+   - `createMerkle`
+
+Left off notes:
+
+On the front end eth_signTypedData_v4 from metamask will be needed to sign using private key
+https://docs.metamask.io/wallet/how-to/sign-data/#use-eth_signtypeddata_v4
+
+For user's sake, should we have a script that creates the reward event, leaves, and merkle tree in one? I think so
+Input needed:
+(`RewardEvent` params minus `merkleRoot`)
+
+1. `nftAddress`
+2. `blockStart`
+3. `blockEnd`
+4. `rewardAmount`
+5. `nfts`
+6. `organizer`
+7. `rewardToken`
+
+User flow:
+
+1. create reward event form on frontend
+
+Under the hood:
+
+1. form calls `createLeaves` using input
+2. that calls `createMerkle`
+3. which in turn calls `createRewardEvent` on the `Claim.sol` contract

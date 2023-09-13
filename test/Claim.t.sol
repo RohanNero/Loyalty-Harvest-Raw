@@ -87,4 +87,41 @@ contract ClaimTest is Test {
         console2.log("reward:", reward);
         assertEq(reward, 25);
     }
+
+    /**@notice test a user claiming their rewards
+     *@dev uses the same params from above excluding the `signature` */
+    function test_Claim() public {
+        vm.roll(100);
+        test_CreateRewardEvent();
+        vm.roll(110);
+        uint preBal = claim.viewEthBalance();
+        console2.log("preBal:", preBal);
+        uint preNftBal = nft.balanceOf(
+            0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E
+        );
+        console2.log("preNftBal:", preNftBal);
+        bytes32[] memory proof = new bytes32[](2);
+        proof[0] = bytes32(
+            0x9cd3b8d6ac952a038694bf75aa9351c88d6528d5e10a1373a688ea0e905cf79e
+        );
+        proof[1] = bytes32(
+            0xee4505a5486f5a4a5e5de78d95c8869d107b173e5e40fec5b238094a1dc0b868
+        );
+
+        Claim.ClaimInfo memory claimInfo = Claim.ClaimInfo({
+            holder: 0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E,
+            to: 0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E,
+            tokenId: 0,
+            eventId: 0,
+            heldUntil: 110
+        });
+        // Since the first user we are testing held their NFT the entire reward duration,
+        // they should receive the entire portion availiable to them, which is 25% of 100 WEI
+        // 25% because there are 4 total NFTs in the RewardEvent struct; splitting x reward between 4 people.
+        // 100 WEI because that is the total reward for the event
+        vm.prank(0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E);
+        uint reward = claim.claim(proof, claimInfo);
+        console2.log("reward:", reward);
+        assertEq(reward, 25);
+    }
 }

@@ -12,6 +12,12 @@ const url =
 
 const web3 = new Web3(url); // Replace with your Ethereum node URL
 
+// const leaves = [
+//   ["0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E", "0", "0", "110"],
+//   ["0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E", "1", "0", "105"],
+//   ["0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E", "2", "0", "100"],
+// ];
+
 // This script is called after the reward period has ended
 // 1. it first creates leaves of all the original NFT holders
 // 2. then loops through the reward period block frame to view all the `Transfer` events, if one was fired,
@@ -22,31 +28,39 @@ const web3 = new Web3(url); // Replace with your Ethereum node URL
 // 6. users create a leaf using their signature, id, and possibily the block they sold at, then a proof using the leaf and the root
 // 7. users call claim() function in smart contract with `root`, `proof`, and `leaf` to get their reward.
 
-async function main() {
+/**
+ * This function creates the Merkle Tree by taking in two input parameters
+ * leaves - all of the leaves to build the tree with
+ * structure - array of strings describing the types inside the leaves
+ */
+async function createMerkle(leaves, structure) {
   // Example leaves for testing, realistically, this script will take in an array as input with the true leaves
   // the leaves will be created in a seperate script `createLeaves`, this script will take input such as blockStart, blockEnd, contractAddress
   // other likely input parameters would be the path to where the tree json file will be written
   // and an array of strings that describe the leaf variable types
   // leaf consists of `holder`, `tokenId`, `eventId`, `heldUntil`
-  const leaves = [
-    ["0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E", "0", "0", "110"],
-    ["0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E", "1", "0", "105"],
-    ["0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E", "2", "0", "100"],
-  ];
 
+  // ensure the `structure` and `leaves` objects are compatible
+  if (leaves[0].length != structure.length) {
+    console.log("leaves data and leaf structure doesn't match");
+    console.log("leaves data length:", leaves[0].length);
+    console.log("leaf structure length:", structure.length);
+    return;
+  }
   // Create the merkle tree and explicitly state the structure of the leaves
-  const tree = StandardMerkleTree.of(leaves, [
-    "address",
-    "uint256",
-    "uint256",
-    "uint256",
-  ]);
+  const tree = StandardMerkleTree.of(leaves, structure);
 
-  console.log("tree:", tree);
-  // log the root
+  //console.log("Tree:", tree);
   console.log("Merkle Root:", tree.root);
   // write the entire tree to a json file at the specified path
   fs.writeFileSync("trees/tree_00.json", JSON.stringify(tree.dump()));
 }
 
-main();
+createMerkle(
+  [
+    ["0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E", "0", "0", "110"],
+    ["0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E", "1", "0", "105"],
+    ["0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E", "2", "0", "100"],
+  ],
+  ["address", "uint256", "uint256", "uint256"],
+);

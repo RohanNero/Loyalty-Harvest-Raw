@@ -12,10 +12,14 @@ error Claim__InvalidTimestamps();
 error Claim__RewardTransferFailed();
 error Claim__MustProvideRootIfContestIsOver();
 error Claim__InvalidSigner();
+error Claim__MustSendRewardAmount();
+error Claim__InvalidCaller();
 
 /**@title Claim
  *@author Rohan Nero
- *@notice this contract allows anyone claim rewards earned during a `reward period` */
+ *@notice this contract allows anyone claim rewards earned during a `reward period`
+ *@dev only compatible with ERC-721 compliant contracts
+ */
 contract Claim {
     /**@notice each struct outlines the details of a reward event
      *@dev nftContract - the ERC721 contract
@@ -60,8 +64,9 @@ contract Claim {
     mapping(uint eventId => mapping(uint tokenId => bool hasClaimed))
         public claimMap;
 
-    /**@notice anyone would be able to claim after the endTime
-     *@dev this needs to use `MerkleProof` lib to verify that the caller can receieve funds
+    /**@notice anyone can claim after the endTime
+     *@dev this uses `MerkleProof` lib to verify that the caller can receieve funds
+     *@dev the signature must belong to the holder of the NFT
      *@param proof is an array of proofs that can be used to verifiy the user's claim
      *@param signature contains hash of holder, tokenId, eventId, heldUntil
      *@param info is the ClaimInfo struct containing information about the claim
@@ -83,8 +88,6 @@ contract Claim {
             revert Claim__AlreadyClaimed();
         }
 
-        // Want to do the Merkle proof stuff here
-
         // Recover the signer's address
 
         // create the message hash
@@ -94,13 +97,165 @@ contract Claim {
             abi.encodePacked("\x19Ethereum Signed Message:\n32", messageHash)
         );
         // recover the signer
-        address signer = recoverSigner(signedMessageHash, signature);
+        address signer = _recoverSigner(signedMessageHash, signature);
 
         // revert if signer address isn't the holder
         if (signer != info.holder) {
             revert Claim__InvalidSigner();
         }
 
+        uint portion = _claim(proof, info);
+        return portion;
+    }
+
+    /**@notice anyone can claim after the endTime
+     *@dev this uses `MerkleProof` lib to verify that the caller can receieve funds
+     *@dev msg.sender must be the address that held the NFT
+     *@param proof is an array of proofs that can be used to verifiy the user's claim
+     *@param info is the ClaimInfo struct containing information about the claim
+     */
+    function claim(
+        bytes32[] memory proof,
+        ClaimInfo memory info
+    ) public returns (uint) {
+        // ensure the event has ended
+        if (block.number < eventMap[info.eventId].endBlock) {
+            revert Claim__RewardsPeriodHasntEnded(
+                block.number,
+                eventMap[info.eventId].endBlock
+            );
+        }
+        // ensure the user hasn't already claimed for this event and tokenId
+        if (claimMap[info.eventId][info.tokenId]) {
+            revert Claim__AlreadyClaimed();
+        }
+        // ensure that msg.sender is the holder of the NFT
+        if (msg.sender != info.holder) {
+            revert Claim__InvalidCaller();
+        }
+        uint portion = _claim(proof, info);
+        return portion;
+    }
+
+    /**@notice anyone can call this function to create a reward event
+     *@dev _root may be set to 0 if waiting until reward period to add
+     *@param _nftContract is the ERC-721 contract associated with the Reward Event
+     *@param _rewardToken is the token to be sent as rewards
+     *@param _organizer is the address that created the Reward Event
+     *@param _root is the Merkle Root of the Reward Event
+     *@param _blockStart is the block number that the Reward Event started at
+     *@param _blockEnd is the block number that the Reward Event ended at
+     *@param _rewardAmount is the amount of reward token to be sent to the holders
+     *@param _nfts is the total amount of NFTs eligible for rewards
+     */
+    function createRewardEvent(
+        address _nftContract,
+        address _rewardToken,
+        address _organizer,
+        bytes32 _root,
+        uint _blockStart,
+        uint _blockEnd,
+        uint _rewardAmount,
+        uint _nfts
+    ) public payable {
+        // if event period is over, root has to be set
+        if (block.number > _blockEnd && _root == 0) {
+            revert Claim__MustProvideRootIfContestIsOver();
+        }
+        // conditional to ensure that the organizer sends the funds
+
+        // msg.value if native ETH
+        if (_rewardToken == address(0)) {
+            if (msg.value < _rewardAmount) {
+                revert Claim__MustSendRewardAmount();
+            }
+        }
+        // `transferFrom` for ERC-20
+        else {
+            IERC20(_rewardToken).transferFrom(
+                _organizer,
+                address(this),
+                _rewardAmount
+            );
+        }
+
+        // add the struct to the eventMap
+        eventMap.push(
+            RewardEvent(
+                _nftContract,
+                _rewardToken,
+                _organizer,
+                _root,
+                _blockStart,
+                _blockEnd,
+                _rewardAmount,
+                _nfts,
+                eventMap.length
+            )
+        );
+    }
+
+    /** View / pure functions */
+
+    /**@notice returns the duration of the reward period in blocks */
+    function viewRewardPeriodDuration(uint eventId) public view returns (uint) {
+        return eventMap[eventId].endBlock - eventMap[eventId].startBlock;
+    }
+
+    /**@notice returns this contract's entire eth balance */
+    function viewEthBalance() public view returns (uint) {
+        return address(this).balance;
+    }
+
+    /**@notice returns length of `eventMap` */
+    function viewEventMapLength() public view returns (uint) {
+        return eventMap.length;
+    }
+
+    /**@notice recovers the signer
+     *@dev from SMP's signature recovery */
+    function _recoverSigner(
+        bytes32 _signedMessageHash,
+        bytes memory _signature
+    ) internal pure returns (address) {
+        (bytes32 r, bytes32 s, uint8 v) = _splitSignature(_signature);
+
+        return ecrecover(_signedMessageHash, v, r, s);
+    }
+
+    /**@notice splits the signature
+     *@dev from SMP's signature recovery */
+    function _splitSignature(
+        bytes memory sig
+    ) internal pure returns (bytes32 r, bytes32 s, uint8 v) {
+        require(sig.length == 65, "invalid signature length");
+
+        assembly {
+            /*
+            First 32 bytes stores the length of the signature
+
+            add(sig, 32) = pointer of sig + 32
+            effectively, skips first 32 bytes of signature
+
+            mload(p) loads next 32 bytes starting at the memory address p into memory
+            */
+
+            // first 32 bytes, after the length prefix
+            r := mload(add(sig, 32))
+            // second 32 bytes
+            s := mload(add(sig, 64))
+            // final byte (first byte of the next 32 bytes)
+            v := byte(0, mload(add(sig, 96)))
+        }
+
+        // implicitly return (r, s, v)
+    }
+
+    /**@notice internal claim function that actually verifies `proof` and sends rewards */
+    function _claim(
+        bytes32[] memory proof,
+        ClaimInfo memory info
+    ) internal returns (uint) {
         // Calculate the user's `leaf` hash
         bytes32 leaf = keccak256(
             bytes.concat(
@@ -176,102 +331,5 @@ contract Claim {
         }
         claimMap[info.eventId][info.tokenId] == true;
         return portion;
-    }
-
-    /**@notice anyone can call this function to create a reward event
-     *@dev _root may be set to 0 if waiting until reward period to add
-     *@param _nftContract is the ERC-721 contract associated with the Reward Event
-     *@param _rewardToken is the token to be sent as rewards
-     *@param _organizer is the address that created the Reward Event
-     *@param _root is the Merkle Root of the Reward Event
-     *@param _blockStart is the block number that the Reward Event started at
-     *@param _blockEnd is the block number that the Reward Event ended at
-     *@param _rewardAmount is the amount of reward token to be sent to the holders
-     *@param _nfts is the total amount of NFTs eligible for rewards
-     */
-    function createRewardEvent(
-        address _nftContract,
-        address _rewardToken,
-        address _organizer,
-        bytes32 _root,
-        uint _blockStart,
-        uint _blockEnd,
-        uint _rewardAmount,
-        uint _nfts
-    ) public payable {
-        // if event period is over, root has to be set
-        if (block.number > _blockEnd && _root == 0) {
-            revert Claim__MustProvideRootIfContestIsOver();
-        }
-
-        // add the struct to the eventMap
-        eventMap.push(
-            RewardEvent(
-                _nftContract,
-                _rewardToken,
-                _organizer,
-                _root,
-                _blockStart,
-                _blockEnd,
-                _rewardAmount,
-                _nfts,
-                eventMap.length
-            )
-        );
-    }
-
-    /** View / pure functions */
-
-    /**@notice returns the duration of the reward period in seconds */
-    function viewRewardPeriodDuration(uint eventId) public view returns (uint) {
-        return eventMap[eventId].endBlock - eventMap[eventId].startBlock;
-    }
-
-    function viewEthBalance() public view returns (uint) {
-        return address(this).balance;
-    }
-
-    /**@notice returns length of `eventMap` */
-    function viewEventMapLength() public view returns (uint) {
-        return eventMap.length;
-    }
-
-    /**@notice recovers the signer
-     *@dev from SMP's signature recovery */
-    function recoverSigner(
-        bytes32 _signedMessageHash,
-        bytes memory _signature
-    ) internal pure returns (address) {
-        (bytes32 r, bytes32 s, uint8 v) = splitSignature(_signature);
-
-        return ecrecover(_signedMessageHash, v, r, s);
-    }
-
-    /**@notice splits the signature
-     *@dev from SMP's signature recovery */
-    function splitSignature(
-        bytes memory sig
-    ) internal pure returns (bytes32 r, bytes32 s, uint8 v) {
-        require(sig.length == 65, "invalid signature length");
-
-        assembly {
-            /*
-            First 32 bytes stores the length of the signature
-
-            add(sig, 32) = pointer of sig + 32
-            effectively, skips first 32 bytes of signature
-
-            mload(p) loads next 32 bytes starting at the memory address p into memory
-            */
-
-            // first 32 bytes, after the length prefix
-            r := mload(add(sig, 32))
-            // second 32 bytes
-            s := mload(add(sig, 64))
-            // final byte (first byte of the next 32 bytes)
-            v := byte(0, mload(add(sig, 96)))
-        }
-
-        // implicitly return (r, s, v)
     }
 }
