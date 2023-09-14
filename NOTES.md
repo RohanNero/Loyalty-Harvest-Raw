@@ -323,4 +323,7 @@ reward event for stack exchange ethereum users
 This would read from stack exchange api to view user data such as rep and description
 to match eth address to stack exchange account, users will need to put their address in stack exchange desc
 
-Newst
+9/14 notes:
+
+1. assess current project status
+   -

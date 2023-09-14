@@ -6,7 +6,7 @@ const url =
 
 //console.log("url:", url);
 
-// address is the third argument in terminal
+// address is the third argument in terminal (how to call it via command line)
 // 1. = node
 // 2. = js/createSig.js
 // 3. = 0xe4a98d2bfd66ce08128fdfffc9070662e489a28e
@@ -14,9 +14,11 @@ const url =
 
 // This funtion returns a signature for the PRIVATE_KEY in the .env file
 // You must pass in an address `to` to be hashed, this address will receive the rewards when `claim` is called
+
+// eth_signTypedData_v4 from metamask will be needed to sign using private key on frontend
 /** INPUT:
  * 1. address to encode 0xe4a98d2bfd66ce08128fdfffc9070662e489a28e
- * 2. eth_signTypedData_v4 from metamask will be needed to sign using private key
+ *
  */
 async function createSig(address) {
   console.log("address:", address);
