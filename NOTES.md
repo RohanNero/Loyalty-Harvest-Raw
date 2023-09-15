@@ -326,4 +326,26 @@ to match eth address to stack exchange account, users will need to put their add
 9/14 notes:
 
 1. assess current project status
-   -
+   - backend seems ~complete~
+2. overhaul repo into new structure
+3. begin on frontend by adding next13 into `frontend` folder
+   - We will need a few things on the frontend, lets list them:
+     1. input form for creating event as an `organizer`,
+        - this input form calls all the needed scripts and then the `Claim` contract.
+     2. input form to allow users to create signatures
+     3. input form to allow users to create `proof`
+
+### For the **frontend**, I think we should split it into two sections at the home page, one for `organizer`s and one for `users`:
+
+Organizer page will have:
+
+1. input form to create event
+2. list of NFT projects they can create events for? **OPTIONAL**
+
+User page will have:
+
+1. form to create `signature`
+2. form to create `proof`
+   - should this use solely input or be able to grab from existing reward events?
+   - wouldn't I need to start storing events in a database or something?
+3. place to view existing events **OPTIONAL**
