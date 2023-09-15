@@ -349,3 +349,10 @@ User page will have:
    - should this use solely input or be able to grab from existing reward events?
    - wouldn't I need to start storing events in a database or something?
 3. place to view existing events **OPTIONAL**
+4. place to input their own rpc url as opposed to using the public RPC URL I provide as default. **OPTIONAL**
+
+To deal with user RPC_URL and API_KEY stuff, I will use a default value of a public rpc url, but allow users the option to input their own if they'd like.
+
+Left off dealing with some `client` vs `server` side stuff, yay super fun!
+
+You'll either need to refactor using different stuffs w/o `fs`, learn something you don't know, or set up APIs

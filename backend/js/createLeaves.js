@@ -2,8 +2,16 @@ const Web3 = require("web3");
 require("dotenv").config();
 const { nftAbi } = require("../abi/NFT.json");
 
-const url =
-  "https://eth-sepolia.g.alchemy.com/v2/" + process.env.SEPOLIA_RPC_URL;
+//const url = "https://eth-sepolia.public.blastapi.io"; //`eth_getLogs` doesn't work
+//const url = "https://rpc2.sepolia.org"; // `missing trie node`
+//const url = "https://ethereum-sepolia.blockpi.network/v1/rpc/public"; // `missing trie node`
+//const url = "https://eth-sepolia-public.unifra.io"; // `missing trie node`
+const url = "https://eth-sepolia.g.alchemy.com/v2/demo"; // exceeded concurrent requests capacity <-- ALCHEMY
+// const url =
+//   "https://eth-sepolia.g.alchemy.com/v2/" + process.env.SEPOLIA_RPC_URL;
+
+console.log("test");
+console.log(url);
 
 const web3 = new Web3(url);
 
@@ -23,7 +31,12 @@ async function getOwnerAtBlock(nftContract, tokenId, blockNumber) {
  * 3. blockEnd is the ending block number of the reward period
  * 4. totalSupply is the total amount of NFTs, which will be the total number of leaves
  */
-async function createLeaves(nftAddress, blockStart, blockEnd, totalSupply) {
+export default async function createLeaves(
+  nftAddress,
+  blockStart,
+  blockEnd,
+  totalSupply,
+) {
   //   console.log("nftAddress:", nftAddress);
   //   console.log("blockStart:", blockStart);
   //   console.log("blockEnd:", blockEnd);
