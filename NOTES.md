@@ -351,7 +351,9 @@ User page will have:
 3. place to view existing events **OPTIONAL**
 4. place to input their own rpc url as opposed to using the public RPC URL I provide as default. **OPTIONAL**
 
-To deal with user RPC_URL and API_KEY stuff, I will use a default value of a public rpc url, but allow users the option to input their own if they'd like.
+To deal with user `RPC_URL` and `API_KEY` stuff, I will use a default value of a public rpc url, but allow users the option to input their own if they'd like.
+
+Public RPC URLS: https://www.alchemy.com/chain-connect/chain/sepolia
 
 Left off dealing with some `client` vs `server` side stuff, yay super fun!
 
