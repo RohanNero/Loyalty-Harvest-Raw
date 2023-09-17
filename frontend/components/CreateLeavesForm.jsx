@@ -1,12 +1,9 @@
 "use client";
 import React, { useState } from "react";
 //import createLeaves from "../../backend/js/createLeaves";
-import { POST } from "../src/app/api/route";
-
-// const fetch = require("node-fetch");
-// const retry = require("async-retry");
-
-// import fetch from "node-fetch"
+// Route handler api call, not sure how to use route handlers currently lol
+//import { POST } from "../src/app/api/route";
+// Used to ensure that the call suceeds past `exceeded rate limit` error
 import retry from "async-retry";
 
 export default function CreateLeavesForm() {
@@ -32,17 +29,13 @@ export default function CreateLeavesForm() {
     const { nftAddress, blockStart, blockEnd } = formData;
     try {
       console.log("formData:", formData);
+      // Original fetch request without `retries`
       // const leaves = await fetch("/api/createLeavesAPI", {
       //   method: "POST",
       //   headers: {
       //     "Content-Type": "application/json", // Specify JSON content type
       //   },
-      //   body: JSON.stringify(formData),
-      //   retries: 5, // Number of retries before giving up
-      //   factor: 2, // Exponential factor
-      //   minTimeout: 1000, // Minimum wait time before retrying
-      //   maxTimeout: 60000, // Maximum wait time before retrying
-      //   randomize: true, // Randomize the wait time
+      //   body: JSON.stringify(formData)
       // });
       const leaves = await retry(
         async () => {
@@ -88,57 +81,56 @@ export default function CreateLeavesForm() {
   };
 
   return (
-    <div className="w-full md:w-1/2 p-4 md:p-10">
-      <h3 className="text-xl mb-4">Create Leaves Input Form</h3>
-      <form className="border rounded p-4 text-center " onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <input
-            type="string"
-            name="nftAddress"
-            placeholder="NFT contract address"
-            className="border border-gray-300 rounded p-2 w-full"
-            value={formData.nftAddress}
-            onChange={handleInputChange}
-          />
-        </div>
-        <div className="mb-4">
-          <input
-            type="number"
-            name="blockStart"
-            placeholder="Starting block number"
-            className="border border-gray-300 rounded p-2 w-full"
-            value={formData.blockStart}
-            onChange={handleInputChange}
-          />
-        </div>
-        <div className="mb-4">
-          <input
-            type="number"
-            name="blockEnd"
-            placeholder="Ending block number"
-            className="border border-gray-300 rounded p-2 w-full"
-            value={formData.blockEnd}
-            onChange={handleInputChange}
-          />
-        </div>
-        <div className="mb-4">
-          <input
-            type="number"
-            name="totalSupply"
-            placeholder="Total amount of NFTs"
-            className="border border-gray-300 rounded p-2 w-full"
-            value={formData.totalSupply}
-            onChange={handleInputChange}
-          />
-        </div>
-        <div>
-          <button
-            type="submit"
-            className="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600"
-          >
-            Create
-          </button>
-        </div>
+    <div className="border rounded border-purple-800 bg-purple-500 font-mono py-3 mb-4 w-1/2 flex-col flex items-center justify-center w-2/3">
+      <h3 className="text-xl text-green-300 justify-self-center mb-4">
+        Create Leaves
+      </h3>
+      <form
+        className="text-center w-full flex flex-col gap-2 items-center justify-center"
+        onSubmit={handleSubmit}
+      >
+        <input
+          type="string"
+          name="nftAddress"
+          placeholder="NFT contract address"
+          className="border border-purple-500 p-1.5 rounded w-2/3 bg-green-200 hover:bg-green-300"
+          value={formData.nftAddress}
+          onChange={handleInputChange}
+        />
+
+        <input
+          type="number"
+          name="blockStart"
+          placeholder="Starting block number"
+          className="border border-purple-500 p-1.5 rounded w-2/3 bg-green-200 hover:bg-green-300"
+          value={formData.blockStart}
+          onChange={handleInputChange}
+        />
+
+        <input
+          type="number"
+          name="blockEnd"
+          placeholder="Ending block number"
+          className="border border-purple-500 p-1.5 rounded w-2/3 bg-green-200 hover:bg-green-300"
+          value={formData.blockEnd}
+          onChange={handleInputChange}
+        />
+
+        <input
+          type="number"
+          name="totalSupply"
+          placeholder="Total amount of NFTs"
+          className="border border-purple-500 p-1.5 rounded w-2/3 bg-green-200 hover:bg-green-300"
+          value={formData.totalSupply}
+          onChange={handleInputChange}
+        />
+
+        <button
+          type="submit"
+          className="bg-purple-700 border-purple-800 border text-green-300 rounded my-2 px-4 py-2 hover:-translate-y-1 hover:text-purple-400 hover:bg-green-300 w-1/2"
+        >
+          Create
+        </button>
       </form>
     </div>
   );

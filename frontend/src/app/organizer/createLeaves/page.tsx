@@ -5,13 +5,24 @@ import Link from "next/link";
 
 export default function Page() {
   return (
-    <main className="flex min-h-screen flex-col p-10">
-      <div className="bg-red-300">
-        <h1 className="items-center font-mono text-2xl font-bold ">
+    // <div className="flex min-h-screen bg-green-200 flex-col p-10">
+    //   <div className="bg-red-300">
+    //     <h1 className="items-center font-mono text-2xl font-bold ">
+    //       <Link href="/organizer">Organizer</Link>
+    //     </h1>
+    //   </div>
+    //   <CreateLeavesForm />
+    // </div>
+    <div className="min-h-screen justify-center bg-green-200 text-purple-200 flex">
+      <div className="mt-[14vh] items-center justify-self-center flex flex-col w-2/3 bg-purple-400">
+        <h1 className="font-mono justify-self-center p-10 text-2xl font-bold ">
           <Link href="/organizer">Organizer</Link>
         </h1>
+        <CreateLeavesForm />
+        <div>
+          <p className="font-mono px-10">Lorem ipsum dolor sit amet</p>
+        </div>
       </div>
-      <CreateLeavesForm />
-    </main>
+    </div>
   );
 }
