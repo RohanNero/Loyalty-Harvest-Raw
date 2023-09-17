@@ -105,11 +105,11 @@ export default async function createLeaves(
 }
 
 // Call the createLeaves function and log the resulting leaves
-createLeaves("0x52469E13ac6DdbFbf803F48E7106f8294E2B888f", 4283020, 4283030, 6)
-  .then((leaves) => {
-    console.log("Merkle Tree Leaves:");
-    console.log(leaves);
-  })
-  .catch((error) => {
-    console.error("Error:", error);
-  });
+// createLeaves("0x52469E13ac6DdbFbf803F48E7106f8294E2B888f", 4283020, 4283030, 6)
+//   .then((leaves) => {
+//     console.log("Merkle Tree Leaves:");
+//     console.log(leaves);
+//   })
+//   .catch((error) => {
+//     console.error("Error:", error);
+//   });

@@ -358,3 +358,14 @@ Public RPC URLS: https://www.alchemy.com/chain-connect/chain/sepolia
 Left off dealing with some `client` vs `server` side stuff, yay super fun!
 
 You'll either need to refactor using different stuffs w/o `fs`, learn something you don't know, or set up APIs
+
+9/16 notes:
+
+Decided to set up APIs for calling my scripts
+
+API not being found, geussing it has to do with the path I've provided to fetch. Must rethink this, WW uses `pages/api`, I might need to structure my project the same.
+
+Left off getting `createLeaves` to work!!! :D yay!!!
+
+Only issue is that using the public RPC_URL will not return the data you want all the time, retries are enabled but it isn't guarenteed to work.
+Will definitely have to create a method that allows users to provde their own RPC_URL/API key in a secure manner.
