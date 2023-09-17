@@ -369,3 +369,24 @@ Left off getting `createLeaves` to work!!! :D yay!!!
 
 Only issue is that using the public RPC_URL will not return the data you want all the time, retries are enabled but it isn't guarenteed to work.
 Will definitely have to create a method that allows users to provde their own RPC_URL/API key in a secure manner.
+
+I think next steps are:
+
+1. clean up frontend
+2. create remaining api (merkle, proof, signature)
+3. finally create a mechanism for calling the `Claim` smart contract
+
+Frontend work
+
+1. clean up landing/home page, no nav bar but two huge buttons to choose between `User` and `Organizer`, below will be information about the project and then at the very bottom a nice looking footer with links to socials and `help` page and whatever else we want :D
+
+2. clean up navbar for organizer and set up all the needed pages
+3. copy code from `/organizer` to `/user` for whatever is needed :D
+4. do a little jig
+
+organizer home page
+
+- navbar at top with link to home, other pages
+- body of page will include title indicating you are on the organizer dashboard
+- and rest of body under title will include information about being an organizer
+  - how to create events, how to create leaves, and merkle tree

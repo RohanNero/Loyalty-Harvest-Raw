@@ -88,7 +88,7 @@ export default function CreateLeavesForm() {
   };
 
   return (
-    <div className="w-1/2 p-40">
+    <div className="w-full md:w-1/2 p-4 md:p-10">
       <h3 className="text-xl mb-4">Create Leaves Input Form</h3>
       <form className="border rounded p-4 text-center " onSubmit={handleSubmit}>
         <div className="mb-4">
