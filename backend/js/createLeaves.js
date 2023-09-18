@@ -10,9 +10,6 @@ const url = "https://eth-sepolia.g.alchemy.com/v2/demo"; // exceeded concurrent 
 // const url =
 //   "https://eth-sepolia.g.alchemy.com/v2/" + process.env.SEPOLIA_RPC_URL;
 
-console.log("test");
-console.log(url);
-
 const web3 = new Web3(url);
 
 // used to view the NFT holders at `blockStart`

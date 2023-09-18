@@ -20,41 +20,45 @@ export default function OrganizerRootLayout({
       <body className={inter.className}>
         <div className="fixed w-full pl-4 flex flex-row gap-4 bg-purple-800 text-purple-400 items-center h-[14vh]">
           <Link href="/">
-            <div className="text-lg font-semibold border-2 border-purple-600 bg-green-300 rounded hover:text-purple-400 hover:bg-green-400 hover:-translate-y-1 p-1">
+            <div className="text-lg font-mono border-2  border-purple-600 bg-gradient-to-r from-green-300 to-purple-400 text-purple-600 hover:to-purple-800 hover:from-green-600 hover:text-green-300 hover:shadow-lg hover:-translate-y-1 p-1">
               Loyalty Harvest
             </div>
           </Link>
           <Link href="/organizer">
-            <div className="text-lg font-semibold border-2  border-purple-600 bg-green-300 rounded hover:text-purple-400 hover:bg-green-400 hover:-translate-y-1 p-1">
+            <div className="text-lg font-mono border-2  border-purple-600 bg-gradient-to-l from-green-300 to-purple-400 text-purple-600 hover:to-purple-800 hover:from-green-600 hover:text-green-300 hover:shadow-lg hover:-translate-y-1 p-1">
               Organizer Dashboard
             </div>
           </Link>
           <Link href="/organizer/createLeaves">
-            <div className="text-lg font-semibold border-2  border-purple-600 bg-green-300 rounded hover:text-purple-400 hover:bg-green-400 hover:-translate-y-1 p-1">
+            <div className="text-lg font-mono border-2  border-purple-600 bg-gradient-to-r from-green-300 to-purple-400 text-purple-600 hover:to-purple-800 hover:from-green-600 hover:text-green-300 hover:shadow-lg hover:-translate-y-1 p-1">
               Create Leaves
             </div>
           </Link>
           <Link href="/organizer/createMerkle">
-            <div className="text-lg font-semibold border-2  border-purple-600 bg-green-300 rounded hover:text-purple-400 hover:bg-green-400 hover:-translate-y-1 p-1">
+            <div className="text-lg font-mono border-2  border-purple-600 bg-gradient-to-l from-green-300 to-purple-400 text-purple-600 hover:to-purple-800 hover:from-green-600 hover:text-green-300 hover:shadow-lg hover:-translate-y-1 p-1">
               Create Merkle
             </div>
           </Link>
           <Link href="/organizer/createEvent">
-            <div className="text-lg font-semibold border-2  border-purple-600 bg-green-300 rounded hover:text-purple-400 hover:bg-green-400 hover:-translate-y-1 p-1">
+            <div className="text-lg font-mono border-2  border-purple-600 bg-gradient-to-r from-green-300 to-purple-400 text-purple-600 hover:to-purple-800 hover:from-green-600 hover:text-green-300 hover:shadow-lg hover:-translate-y-1 p-1">
               Create Event
             </div>
           </Link>
           <Link href="/">
-            <div className="text-lg font-semibold border-2 border-purple-600 bg-green-300 rounded hover:text-purple-400 hover:bg-green-400 hover:-translate-y-1 p-1">
+            <div className="text-lg font-mono border-2  border-purple-600 bg-gradient-to-l from-green-300 to-purple-400 text-purple-600 hover:to-purple-800 hover:from-green-600 hover:text-green-300 hover:shadow-lg hover:-translate-y-1 p-1">
               Placeholder
             </div>
           </Link>
           <Link href="/">
-            <div className="text-lg font-semibold border-2 border-purple-600 bg-green-300 rounded hover:text-purple-400 hover:bg-green-400 hover:-translate-y-1 p-1">
+            <div className="text-lg font-mono border-2  border-purple-600 bg-gradient-to-r from-green-300 to-purple-400 text-purple-600 hover:to-purple-800 hover:from-green-600 hover:text-green-300 hover:shadow-lg hover:-translate-y-1 p-1">
               Placeholder
             </div>
           </Link>
+          <div className="hover:shadow-lg ml-32 p-1">
+            <img src="icon.png" alt="Description of the image" />
+          </div>
         </div>
+
         {children}
         <div className="bg-purple-900">Footer</div>
       </body>

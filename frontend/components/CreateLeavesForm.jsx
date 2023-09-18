@@ -40,7 +40,6 @@ export default function CreateLeavesForm() {
       const leaves = await retry(
         async () => {
           // Make the API request
-          console.log("reached?");
           const response = await fetch("/api/createLeavesAPI", {
             method: "POST",
             headers: {
@@ -72,7 +71,7 @@ export default function CreateLeavesForm() {
 
       // Return the result
       console.log("leaves:", leaves);
-      return result;
+      return leaves;
       //const leaves = POST(formData);
       //console.log("Merkle Tree Leaves:", fetchWithRetries);
     } catch (error) {
@@ -81,7 +80,7 @@ export default function CreateLeavesForm() {
   };
 
   return (
-    <div className="border rounded border-purple-800 bg-purple-500 font-mono py-3 mb-4 w-1/2 flex-col flex items-center justify-center w-2/3">
+    <div className="bg-purple-400 font-mono py-3 mb-4 w-1/2 flex-col flex items-center justify-center w-2/3">
       <h3 className="text-xl text-green-300 justify-self-center mb-4">
         Create Leaves
       </h3>
@@ -93,7 +92,7 @@ export default function CreateLeavesForm() {
           type="string"
           name="nftAddress"
           placeholder="NFT contract address"
-          className="border border-purple-500 p-1.5 rounded w-2/3 bg-green-200 hover:bg-green-300"
+          className="border border-purple-500 p-1.5 text-purple-400 focus:ring-0  rounded w-2/3 bg-green-200 hover:bg-green-300"
           value={formData.nftAddress}
           onChange={handleInputChange}
         />
@@ -102,7 +101,7 @@ export default function CreateLeavesForm() {
           type="number"
           name="blockStart"
           placeholder="Starting block number"
-          className="border border-purple-500 p-1.5 rounded w-2/3 bg-green-200 hover:bg-green-300"
+          className="border border-purple-500 p-1.5 text-purple-400 focus:ring-0 rounded w-2/3 bg-green-200 hover:bg-green-300"
           value={formData.blockStart}
           onChange={handleInputChange}
         />
@@ -111,7 +110,7 @@ export default function CreateLeavesForm() {
           type="number"
           name="blockEnd"
           placeholder="Ending block number"
-          className="border border-purple-500 p-1.5 rounded w-2/3 bg-green-200 hover:bg-green-300"
+          className="border border-purple-500 p-1.5 text-purple-400 focus:ring-0 rounded w-2/3 bg-green-200 hover:bg-green-300"
           value={formData.blockEnd}
           onChange={handleInputChange}
         />
@@ -120,14 +119,14 @@ export default function CreateLeavesForm() {
           type="number"
           name="totalSupply"
           placeholder="Total amount of NFTs"
-          className="border border-purple-500 p-1.5 rounded w-2/3 bg-green-200 hover:bg-green-300"
+          className="border border-purple-500 p-1.5 text-purple-400 focus:ring-0 rounded w-2/3 bg-green-200 hover:bg-green-300"
           value={formData.totalSupply}
           onChange={handleInputChange}
         />
 
         <button
           type="submit"
-          className="bg-purple-700 border-purple-800 border text-green-300 rounded my-2 px-4 py-2 hover:-translate-y-1 hover:text-purple-400 hover:bg-green-300 w-1/2"
+          className="bg-purple-700 border-purple-800 border text-green-300 rounded my-2 px-4 py-2 bg-gradient-to-r from-green-400 to-purple-700 hover:to-purple-500 hover:from-green-300 hover:text-purple-600 hover:shadow-lg hover:-translate-y-1   hover:bg-green-300 w-1/2"
         >
           Create
         </button>

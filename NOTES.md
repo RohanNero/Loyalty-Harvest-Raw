@@ -390,3 +390,10 @@ organizer home page
 - body of page will include title indicating you are on the organizer dashboard
 - and rest of body under title will include information about being an organizer
   - how to create events, how to create leaves, and merkle tree
+
+Left off:
+
+making frontend beautiful :D
+
+start with home page showing User and Organizer buttons, add some lorum ipsum below
+then move on to `createMerkle` page
