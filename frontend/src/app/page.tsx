@@ -22,7 +22,7 @@ export default function Home() {
         <div className="flex justify-evenly font-mono bg-green-300 py-32 w-full h-[69vh]">
           <Link className="w-1/3" href="/user">
             {/* Gold coin 1 container */}
-            <div className="relative flex items-center justify-center h-96 w-96 bg-gradient-to-br from-yellow-300 via-yellow-400 to-yellow-300 shadow-lg rounded-full border-8 border-yellow-500 hover:-translate-y-2 hover:shadow-xl">
+            <div className="relative flex items-center justify-center h-96 w-96 bg-gradient-to-br from-yellow-200 via-yellow-500 to-yellow-300 shadow-lg rounded-full border-8 border-yellow-500 hover:-translate-y-2 hover:shadow-xl">
               {/* Four Leaf Clover */}
               <div className="h-32 w-32 relative flex items-center justify-center">
                 {/* Main Square */}
