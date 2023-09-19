@@ -70,12 +70,21 @@ How does the `reward event` admin know exactly how much rewards were earned?
 Are the rewards based on percentage of a total amount?
 
 - if so, the math would be:
+
   1.  calculate the total amount of percentage users could earn
       - for example if there are 1000 NFTs, each nft could earn its holder 0.1% of the reward
   2.  calculate the amount of the total reward the user has earned
       - for example if a user held their NFT for 50% of the reward period, they earned 50% of their max percentage, 0.1% would mean 0.05%.
   3.  transfer the calculated amount to the user
+
       - for example, if a `reward event` was 1 eth in prize, a user who held one NFT for 50% of the time gets 0.005 ether.
+
+## Resources
+
+#### CSS
+
+[Four Leaf Clover](https://codepen.io/zachos/pen/oNwgqXG)
+[Pot of Gold](https://codepen.io/lenasta92579651/pen/eYNyZEK)
 
 ## perspective
 
@@ -413,10 +422,3 @@ left off working on the home-page
 4. setup create merkle and create event forms for organizers
 5. setup create sig and create proof forms for users
 6. setup connect wallet button (will need for `create event`)
-
-## Resources
-
-### CSS
-
-[Four Leaf Clover](https://codepen.io/zachos/pen/oNwgqXG)
-[Pot of Gold](https://codepen.io/lenasta92579651/pen/eYNyZEK)

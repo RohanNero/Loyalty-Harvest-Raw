@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-start bg-green-200 ">
       <div className="pt-4 w-full font-mono text-lg text-center bg-gradient-to-b from-green-200 to-green-600 flex justify-between items-center border-b-2 border-dashed border-green-800">
-        <div className="border-2 border-green-500 rounded-full hover:border-purple-600 bg-gradient-to-r from-green-300 to-purple-400 text-purple-600 from-30% hover:to-purple-800 hover:from-green-600 hover:text-green-300 hover:shadow-lg hover:-translate-y-1 py-3 px-7 font-mono ml-64 rounded">
+        <div className="border-2 border-green-500 rounded-full hover:border-purple-600 bg-gradient-to-r from-green-300 to-purple-400 text-purple-600 from-30% hover:to-purple-800 hover:from-green-600 hover:text-green-300 hover:shadow-lg py-3 px-7 font-mono ml-64 rounded">
           Loyalty Harvest
         </div>
         <div className="pb-2 mr-64">
@@ -249,7 +249,7 @@ export default function Home() {
               {/* The top of the pot */}
               <div className="w-80 h-10 bg-gradient-to-br from-gray-700 via-gray-800 to-gray-800 rounded-lg absolute top-0 left-1/2 transform -translate-x-1/2"></div>
               {/* Little shiny spot on the pot */}
-              <div className="w-5 h-6 bg-gray-100 rounded-full absolute top-28 right-3/4 transform translate-x-2/3"></div>
+              <div className="w-5 h-6 bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300  rounded-full absolute top-28 right-3/4 transform translate-x-2/3"></div>
             </div>
           </Link>
         </div>
