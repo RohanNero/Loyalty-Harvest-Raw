@@ -54,7 +54,7 @@ export default function OrganizerRootLayout({
               Placeholder
             </div>
           </Link>
-          <div className="hover:shadow-lg ml-32 p-1">
+          <div className="ml-32 p-1">
             <img src="icon.png" alt="Description of the image" />
           </div>
         </div>
