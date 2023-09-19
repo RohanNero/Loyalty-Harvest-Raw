@@ -413,3 +413,10 @@ left off working on the home-page
 4. setup create merkle and create event forms for organizers
 5. setup create sig and create proof forms for users
 6. setup connect wallet button (will need for `create event`)
+
+## Resources
+
+### CSS
+
+[Four Leaf Clover](https://codepen.io/zachos/pen/oNwgqXG)
+[Pot of Gold](https://codepen.io/lenasta92579651/pen/eYNyZEK)

@@ -12,18 +12,25 @@ export default function Home() {
           <img src="icon.png" alt="Description of the image" />
         </div>
       </div>
-      <div className="border rounded w-full text-center pt-20 bg-green-300">
-        <div className="flex justify-center">
-          <h1 className="border text-2xl w-3/12 rounded border-green-500 border-2 hover:border-purple-600 bg-gradient-to-r from-purple-400 to-purple-400 text-purple-600 from-30% hover:to-purple-800 hover:from-green-600 hover:text-green-300 hover:shadow-lg hover:-translate-y-1 py-3 px-7 font-mono">
-            Loyalty Harvest
-          </h1>
+      <div className="border flex flex-col rounded w-full text-center pt-10 bg-green-300">
+        <h1 className="text-xl font-mono text-purple-700 bg-green-300 p-3 mb-10 border rounded-lg mx-auto w-1/5">
+          Which one are you?
+        </h1>
+        <div className="flex justify-center gap-[17%]">
+          <h3 className="border text-2xl w-3/12 rounded-full border-green-500 border-2 hover:border-purple-600 bg-gradient-to-r from-purple-400 to-purple-400 text-purple-600 from-30% hover:to-purple-800 hover:from-green-600 hover:text-green-300 hover:shadow-lg hover:-translate-y-1 py-3 px-7 font-mono">
+            User
+          </h3>
+          <h3 className="border text-2xl text-green-600 w-3/12 rounded-full border-green-500 border-2 hover:border-purple-600 bg-gradient-to-r from-purple-400 to-purple-400 text-purple-600 from-30% hover:to-purple-800 hover:from-green-600 hover:text-green-300 hover:shadow-lg hover:-translate-y-1 py-3 px-7 font-mono">
+            Organizer
+          </h3>
         </div>
 
-        <div className="flex justify-evenly font-mono bg-green-300 py-32 w-full h-[69vh]">
+        {/* User and Organizer components */}
+        <div className="flex justify-evenly font-mono bg-green-300 py-16 w-full h-[69vh]">
           {/* User component */}
-          <Link className="w-1/3" href="/user">
+          <Link className="w-1/3 " href="/user">
             {/* Gold coin 1 container */}
-            <div className="relative flex items-center justify-center h-96 w-96 bg-gradient-to-br from-yellow-200 via-yellow-500 to-yellow-300 shadow-lg rounded-full border-8 border-yellow-500 hover:-translate-y-2 hover:shadow-xl hover:from-yellow-200 hover:via-yellow-500 hover:from-15% hover:to-85% hover:to-yellow-200">
+            <div className="relative flex items-center justify-center h-96 w-96 translate-x-20 bg-gradient-to-br from-yellow-200 via-yellow-500 to-yellow-300 shadow-lg rounded-full border-8 border-yellow-500 hover:-translate-y-2 hover:shadow-xl hover:from-yellow-200 hover:via-yellow-500 hover:from-15% hover:to-85% hover:to-yellow-200">
               {/* Four Leaf Clover */}
               <div className="h-1/3 w-1/3 relative flex items-center justify-center">
                 {/* Main Square */}
@@ -53,7 +60,7 @@ export default function Home() {
           {/* Organizer component */}
           <Link className="w-1/3" href="/organizer">
             {/* The pot */}
-            <div className="relative w-96 h-96 bg-gradient-to-br from-gray-800 from-40% via-gray-700 to:75% to-gray-900 rounded-full z-10 hover:-translate-y-2">
+            <div className="relative w-96 h-96 translate-x-10 bg-gradient-to-br from-gray-800 from-40% via-gray-700 to:75% to-gray-900 rounded-full z-10 hover:-translate-y-2">
               {/* The gold coins */}
               {/* Gold coin 1 container */}
               <div className="relative flex items-center justify-center -top-6 left-[30%] h-12 w-12 bg-gradient-to-br from-yellow-200 via-yellow-500 to-yellow-300 shadow-lg rounded-full border-2 border-yellow-500 hover:-translate-y-2 hover:shadow-xl hover:from-yellow-200 hover:via-yellow-500 hover:from-15% hover:to-85% hover:to-yellow-200">
