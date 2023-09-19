@@ -212,7 +212,7 @@ export default function Home() {
                 </div>
               </div>
               {/* Gold coin 7 container */}
-              <div className="relative flex items-center justify-center -top-72 -translate-y-3 left-[65%] h-12 w-12 bg-gradient-to-br from-yellow-200 via-yellow-500 to-yellow-300 shadow-lg rounded-full border-2 border-yellow-500 hover:-translate-y-2 hover:shadow-xl hover:from-yellow-200 hover:via-yellow-500 hover:from-15% hover:to-85% hover:to-yellow-200">
+              <div className="relative flex items-center justify-center -top-72 -translate-y-3 left-[65%] h-12 w-12 bg-gradient-to-br from-yellow-200 via-yellow-500 to-yellow-300 shadow-lg rounded-full border-2 border-yellow-500 hover:-translate-y-5 hover:shadow-xl hover:from-yellow-200 hover:via-yellow-500 hover:from-15% hover:to-85% hover:to-yellow-200">
                 {/* Four Leaf Clover */}
                 <div className="h-1/3 w-1/3 relative flex items-center justify-center">
                   {/* Main Square */}
