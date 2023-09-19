@@ -3,26 +3,28 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-start bg-green-200">
-      <div className="pt-4 w-full font-mono text-lg text-center flex justify-between items-center border border-green-500">
-        <button className="border-2 border-green-500 hover:border-purple-600 bg-gradient-to-r from-green-300 to-purple-400 text-purple-600 from-30% hover:to-purple-800 hover:from-green-600 hover:text-green-300 hover:shadow-lg hover:-translate-y-1 py-3 px-7 font-mono ml-64 rounded">
-          Connect Wallet
-        </button>
+    <div className="flex min-h-screen flex-col items-center justify-start bg-green-200 ">
+      <div className="pt-4 w-full font-mono text-lg text-center bg-gradient-to-b from-green-200 to-green-600 flex justify-between items-center border-b-2 border-dashed border-green-800">
+        <div className="border-2 border-green-500 rounded-full hover:border-purple-600 bg-gradient-to-r from-green-300 to-purple-400 text-purple-600 from-30% hover:to-purple-800 hover:from-green-600 hover:text-green-300 hover:shadow-lg hover:-translate-y-1 py-3 px-7 font-mono ml-64 rounded">
+          Loyalty Harvest
+        </div>
         <div className="pb-2 mr-64">
           <img src="icon.png" alt="Description of the image" />
         </div>
       </div>
       <div className="border flex flex-col rounded w-full text-center pt-10 bg-green-300">
-        <h1 className="text-xl font-mono text-purple-700 bg-green-300 p-3 mb-10 border rounded-lg mx-auto w-1/5">
+        <h1 className="text-xl font-mono text-purple-700 bg-green-500 p-3 mb-10 border border-purple-700 rounded-lg mx-auto w-1/5">
           Which one are you?
         </h1>
-        <div className="flex justify-center gap-[17%]">
-          <h3 className="border text-2xl w-3/12 rounded-full border-green-500 border-2 hover:border-purple-600 bg-gradient-to-r from-purple-400 to-purple-400 text-purple-600 from-30% hover:to-purple-800 hover:from-green-600 hover:text-green-300 hover:shadow-lg hover:-translate-y-1 py-3 px-7 font-mono">
+        <div className="flex justify-center gap-[37%]">
+          {/* <h3 className="border text-2xl w-3/12 rounded-full border-green-500 border-2 hover:border-purple-600 bg-gradient-to-r from-purple-400 to-purple-400 text-purple-600 from-30% hover:to-purple-800 hover:from-green-600 hover:text-green-300 hover:shadow-lg hover:-translate-y-1 py-3 px-7 font-mono">
             User
-          </h3>
-          <h3 className="border text-2xl text-green-600 w-3/12 rounded-full border-green-500 border-2 hover:border-purple-600 bg-gradient-to-r from-purple-400 to-purple-400 text-purple-600 from-30% hover:to-purple-800 hover:from-green-600 hover:text-green-300 hover:shadow-lg hover:-translate-y-1 py-3 px-7 font-mono">
+          </h3> */}
+          <h3 className="text-2xl font-mono text-green-600">User</h3>
+          <h3 className="text-2xl font-mono text-green-600">Creator</h3>
+          {/* <h3 className="border text-2xl text-green-600 w-3/12 rounded-full border-green-500 border-2 hover:border-purple-600 bg-gradient-to-r from-purple-400 to-purple-400 text-purple-600 from-30% hover:to-purple-800 hover:from-green-600 hover:text-green-300 hover:shadow-lg hover:-translate-y-1 py-3 px-7 font-mono">
             Organizer
-          </h3>
+          </h3> */}
         </div>
 
         {/* User and Organizer components */}
