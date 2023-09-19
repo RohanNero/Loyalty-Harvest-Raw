@@ -397,3 +397,19 @@ making frontend beautiful :D
 
 start with home page showing User and Organizer buttons, add some lorum ipsum below
 then move on to `createMerkle` page
+
+9/18 notes:
+
+left off working on the home-page
+
+1. spruce up the two main buttons
+
+- can we make one look like a four leaf clover and the other one look like a pot of gold?
+- what will the pot look like object-wise:
+  1.
+
+2. set up landing page for User button to be similar to the landing page for Organizer
+3. style the pages more
+4. setup create merkle and create event forms for organizers
+5. setup create sig and create proof forms for users
+6. setup connect wallet button (will need for `create event`)
