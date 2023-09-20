@@ -422,3 +422,9 @@ left off working on the home-page
 4. setup create merkle and create event forms for organizers
 5. setup create sig and create proof forms for users
 6. setup connect wallet button (will need for `create event`)
+
+9/20 notes:
+
+1. home page needs text under the icons
+2. createLeavesForm needs to display returned data
+3. add createMerkleForm to createMerkle page

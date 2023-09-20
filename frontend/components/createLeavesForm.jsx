@@ -14,6 +14,8 @@ export default function CreateLeavesForm() {
     blockEnd: "",
     totalSupply: "",
   });
+  const [leafData, setLeafData] = useState([]);
+  const [isLoading, setIsLoaing] = useState(false);
 
   // Function to handle input changes
   const handleInputChange = (e) => {
@@ -37,6 +39,7 @@ export default function CreateLeavesForm() {
       //   },
       //   body: JSON.stringify(formData)
       // });
+      setIsLoaing(true);
       const leaves = await retry(
         async () => {
           // Make the API request
@@ -69,14 +72,49 @@ export default function CreateLeavesForm() {
         }
       );
 
+      setIsLoaing(false);
+      setLeafData(leaves);
       // Return the result
       console.log("leaves:", leaves);
       return leaves;
+
       //const leaves = POST(formData);
       //console.log("Merkle Tree Leaves:", fetchWithRetries);
     } catch (error) {
       console.error("Error:", error);
     }
+  };
+
+  // State to manage pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  // default 10 items per table page
+  const itemsPerPage = 10;
+
+  // Function to handle page change
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  // Calculate the range of items to display based on the current page
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+  // Filter the leaves to display only the items in the current page
+  const leavesToDisplay = leafData?.leaves?.slice(startIndex, endIndex) || [];
+
+  // Function to handle copying leaves data to clipboard
+  const copyToClipboard = () => {
+    const leavesText = JSON.stringify(leafData?.leaves, null, 2); // Convert leaves data to a nicely formatted JSON string
+    navigator.clipboard
+      .writeText(leavesText)
+      .then(() => {
+        // alert("Leaves data copied to clipboard!");
+        console.log("Leaves data copied to clipboard!");
+      })
+      .catch((error) => {
+        console.error("Failed to copy leaves data to clipboard: ", error);
+        alert("Failed to copy leaves data to clipboard");
+      });
   };
 
   return (
@@ -131,6 +169,82 @@ export default function CreateLeavesForm() {
           Create
         </button>
       </form>
+      {/* Conditionally render the result in a paginated table */}
+      {leafData && leafData.success && (
+        <div className="mt-4">
+          <h4 className="text-lg font-semibold text-purple-400 mb-2">
+            Leaves:
+          </h4>
+          <div className="overflow-x-auto">
+            <table className="table-auto border-collapse border border-green-200 bg-green-200 w-full">
+              <thead className="bg-green-300">
+                <tr>
+                  <th className="border border-green-200 p-2 text-purple-500">
+                    Holder
+                  </th>
+                  <th className="border border-green-200 p-2 text-purple-500">
+                    NFT Contract
+                  </th>
+                  <th className="border border-green-200 p-2 text-purple-500">
+                    TokenId
+                  </th>
+                  <th className="border border-green-200 p-2 text-purple-500 custom-padding">
+                    Held Until
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {leavesToDisplay.map((leaf, index) => (
+                  <tr key={index}>
+                    <td className="border border-green-200 p-2 text-purple-400">
+                      {leaf[0]}
+                    </td>
+                    <td className="border border-green-200 p-2 text-purple-400">
+                      {leaf[1]}
+                    </td>
+                    <td className="border border-green-200 p-2 text-purple-400">
+                      {leaf[2]}
+                    </td>
+                    <td className="border border-green-200 p-2 text-purple-400 custom-padding">
+                      {leaf[3]}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {/* Pagination */}
+          <div className="mt-4">
+            {leafData.leaves.length > itemsPerPage && (
+              <ul className="flex space-x-2">
+                {Array.from({
+                  length: Math.ceil(leafData.leaves.length / itemsPerPage),
+                }).map((_, index) => (
+                  <li
+                    key={index}
+                    className={`cursor-pointer ${
+                      currentPage === index + 1 ? "font-bold" : ""
+                    }`}
+                    onClick={() => handlePageChange(index + 1)}
+                  >
+                    {index + 1}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
+      )}
+      {isLoading && <div className="text-lg font-semibold">Loading... </div>}
+      {/* Button to copy leaves data to clipboard */}
+      {leafData && leafData.success && (
+        <button
+          onClick={copyToClipboard}
+          className="bg-purple-700 border-purple-800 border text-green-300 rounded my-2 px-4 py-2 bg-gradient-to-r from-green-400 to-purple-700 hover:to-purple-500 hover:from-green-300 hover:text-purple-600 hover:shadow-lg hover:-translate-y-1 hover:bg-green-300 w-1/2"
+        >
+          Copy Leaves Data to Clipboard
+        </button>
+      )}
     </div>
   );
 }

@@ -6,9 +6,9 @@ const { nftAbi } = require("../abi/NFT.json");
 //const url = "https://rpc2.sepolia.org"; // `missing trie node`
 //const url = "https://ethereum-sepolia.blockpi.network/v1/rpc/public"; // `missing trie node`
 //const url = "https://eth-sepolia-public.unifra.io"; // `missing trie node`
-const url = "https://eth-sepolia.g.alchemy.com/v2/demo"; // exceeded concurrent requests capacity <-- ALCHEMY
-// const url =
-//   "https://eth-sepolia.g.alchemy.com/v2/" + process.env.SEPOLIA_RPC_URL;
+// const url = "https://eth-sepolia.g.alchemy.com/v2/demo"; // exceeded concurrent requests capacity <-- ALCHEMY
+const url =
+  "https://eth-sepolia.g.alchemy.com/v2/" + "lODS8UczUBXH_FO2igtbAwd-ZmejxLHK";
 
 const web3 = new Web3(url);
 
@@ -57,7 +57,7 @@ export default async function createLeaves(
   const nftContract = new web3.eth.Contract(nftAbi, nftAddress); // Replace ABI with your NFT contract's ABI
 
   //  Loop through NFTs and set initial leaf data
-  for (let tokenId = 0; tokenId < totalSupply - 1; tokenId++) {
+  for (let tokenId = 0; tokenId < totalSupply; tokenId++) {
     const holderAddress = await getOwnerAtBlock(
       nftContract,
       tokenId,
@@ -102,7 +102,7 @@ export default async function createLeaves(
 }
 
 // Call the createLeaves function and log the resulting leaves
-// createLeaves("0x52469E13ac6DdbFbf803F48E7106f8294E2B888f", 4283020, 4283030, 6)
+// createLeaves("0x52469E13ac6DdbFbf803F48E7106f8294E2B888f", 4283020, 4283030, 7)
 //   .then((leaves) => {
 //     console.log("Merkle Tree Leaves:");
 //     console.log(leaves);
