@@ -1,6 +1,6 @@
 // "use client";
 //import createLeaves from "../../../../backend/js/createLeaves";
-import CreateLeavesForm from "../../../../components/createLeavesForm";
+import CreateMerkleForm from "../../../../components/createMerkleForm";
 import Link from "next/link";
 
 export default function Page() {
@@ -10,7 +10,7 @@ export default function Page() {
         <h1 className="font-mono justify-self-center p-10 text-2xl font-bold ">
           <Link href="/organizer">Organizer</Link>
         </h1>
-        {/* <CreateLeavesForm /> */}
+        <CreateMerkleForm />
         <div>
           <p className="font-mono px-10">Lorem ipsum dolor sit amet</p>
         </div>

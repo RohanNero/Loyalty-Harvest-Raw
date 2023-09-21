@@ -59,61 +59,73 @@ const web3 = new Web3(url);
  * leaves - all of the leaves to build the tree with
  * structure - array of strings describing the types inside the leaves
  */
-async function createMerkle(leaves, structure) {
+export default async function createMerkle(leaves, structure) {
   // Example leaves for testing, realistically, this script will take in an array as input with the true leaves
   // the leaves will be created in a seperate script `createLeaves`, this script will take input such as blockStart, blockEnd, contractAddress
   // other likely input parameters would be the path to where the tree json file will be written
   // and an array of strings that describe the leaf variable types
   // leaf consists of `holder`, `tokenId`, `eventId`, `heldUntil`
 
+  console.log("script input:");
+  console.log("leaves:", leaves);
+  console.log("structure:", structure);
+
   // ensure the `structure` and `leaves` objects are compatible
+  // console.log("firstLeaf:", leaves[0]);
   if (leaves[0].length != structure.length) {
     console.log("leaves data and leaf structure doesn't match");
     console.log("leaves data length:", leaves[0].length);
     console.log("leaf structure length:", structure.length);
     return;
   }
+  console.log("create the tree");
   // Create the merkle tree and explicitly state the structure of the leaves
   const tree = StandardMerkleTree.of(leaves, structure);
 
   //console.log("Tree:", tree);
-  console.log("Merkle Root:", tree.root);
+  console.log("createMerkle script: Merkle Root:", tree.root);
   // write the entire tree to a json file at the specified path
-  fs.writeFileSync("trees/tree_00.json", JSON.stringify(tree.dump()));
+  //fs.writeFileSync("backend/trees/tree_00.json", JSON.stringify(tree.dump()));
+  const result = {
+    tree,
+    root: tree.root,
+  };
+
+  return result;
 }
 
-createMerkle(
-  [
-    [
-      "0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E",
-      "0x52469E13ac6DdbFbf803F48E7106f8294E2B888f",
-      "0",
-      "4283030",
-    ],
-    [
-      "0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E",
-      "0x52469E13ac6DdbFbf803F48E7106f8294E2B888f",
-      "1",
-      "4283024",
-    ],
-    [
-      "0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E",
-      "0x52469E13ac6DdbFbf803F48E7106f8294E2B888f",
-      "2",
-      "4283030",
-    ],
-    [
-      "0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E",
-      "0x52469E13ac6DdbFbf803F48E7106f8294E2B888f",
-      "3",
-      "4283030",
-    ],
-    [
-      "0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E",
-      "0x52469E13ac6DdbFbf803F48E7106f8294E2B888f",
-      "4",
-      "4283030",
-    ],
-  ],
-  ["address", "address", "uint256", "uint256"],
-);
+// createMerkle(
+//   [
+//     [
+//       "0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E",
+//       "0x52469E13ac6DdbFbf803F48E7106f8294E2B888f",
+//       "0",
+//       "4283030",
+//     ],
+//     [
+//       "0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E",
+//       "0x52469E13ac6DdbFbf803F48E7106f8294E2B888f",
+//       "1",
+//       "4283024",
+//     ],
+//     [
+//       "0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E",
+//       "0x52469E13ac6DdbFbf803F48E7106f8294E2B888f",
+//       "2",
+//       "4283030",
+//     ],
+//     [
+//       "0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E",
+//       "0x52469E13ac6DdbFbf803F48E7106f8294E2B888f",
+//       "3",
+//       "4283030",
+//     ],
+//     [
+//       "0xe4A98D2bFD66Ce08128FdFFFC9070662E489a28E",
+//       "0x52469E13ac6DdbFbf803F48E7106f8294E2B888f",
+//       "4",
+//       "4283030",
+//     ],
+//   ],
+//   ["address", "address", "uint256", "uint256"],
+// );

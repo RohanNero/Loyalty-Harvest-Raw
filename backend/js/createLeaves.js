@@ -6,9 +6,9 @@ const { nftAbi } = require("../abi/NFT.json");
 //const url = "https://rpc2.sepolia.org"; // `missing trie node`
 //const url = "https://ethereum-sepolia.blockpi.network/v1/rpc/public"; // `missing trie node`
 //const url = "https://eth-sepolia-public.unifra.io"; // `missing trie node`
-// const url = "https://eth-sepolia.g.alchemy.com/v2/demo"; // exceeded concurrent requests capacity <-- ALCHEMY
-const url =
-  "https://eth-sepolia.g.alchemy.com/v2/" + "lODS8UczUBXH_FO2igtbAwd-ZmejxLHK";
+const url = "https://eth-sepolia.g.alchemy.com/v2/demo"; // exceeded concurrent requests capacity <-- ALCHEMY
+// const url =
+//   "https://eth-sepolia.g.alchemy.com/v2/" + process.env.SEPOLIA_RPC_URL;
 
 const web3 = new Web3(url);
 

@@ -39,9 +39,11 @@ export default function CreateLeavesForm() {
       //   },
       //   body: JSON.stringify(formData)
       // });
-      setIsLoaing(true);
+      setLeafData([]);
+
       const leaves = await retry(
         async () => {
+          setIsLoaing(true);
           // Make the API request
           const response = await fetch("/api/createLeavesAPI", {
             method: "POST",
