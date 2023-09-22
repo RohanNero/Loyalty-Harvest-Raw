@@ -1,6 +1,4 @@
 // "use client";
-//import createLeaves from "../../../../backend/js/createLeaves";
-import CreateLeavesForm from "../../../components/createLeavesForm";
 import Link from "next/link";
 
 export default function Page() {

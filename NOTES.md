@@ -428,3 +428,25 @@ left off working on the home-page
 1. home page needs text under the icons
 2. createLeavesForm needs to display returned data
 3. add createMerkleForm to createMerkle page
+
+9/21 notes:
+
+1. Set up `user` landing page <-- **DONE**
+2. next figure out `createProof`, does this need to take the Tree as input? If so then all of the trees need to be stored in a db
+   - Do I need the entire merkle tree in order to create a proof?
+   - I think so, meaning we need the user's address as input and the merkle root perhaps? This would search our db for the tree matching our inputted root, and then using the tree and the address, it will generate a proof.
+   - INPUT: user address and merkle root (pairs with a tree from db)
+   - OUTPUT: proof array
+3. set up `createSignature`, this needs to take an address as input in the form, and then connect to **Metamask** to sign it.
+   - INPUT: user address
+   - OUTPUT: signature
+4. set up `claim`, this needs to allow users to pass all input needed for the function call and then send a transaction
+   - INPUT: proof,
+   - OUTPUT: amount claimed
+5. set up `createEvent`
+   - INPUT:
+   - OUTPUT: eventId ? Will the events have an Id?
+6. create `getHeldUntil` for users.
+   - api that returns the block a user held until
+   - will this api use the merkle tree to view the data? or should we make a call similarly to the `createLeaves` script to view the heldUntil time from the duration? We can either get the data from the chain or from our tree
+   - figure out which one is easier and do it

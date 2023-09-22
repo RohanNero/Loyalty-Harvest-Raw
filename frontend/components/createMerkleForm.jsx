@@ -92,7 +92,7 @@ export default function CreateLeavesForm() {
         <input
           type="text"
           name="leaves"
-          placeholder="Leaves (comma-separated)"
+          placeholder="Leaves"
           className="border border-purple-500 p-1.5 text-purple-400 focus:ring-0 rounded w-2/3 bg-green-200 hover:bg-green-300"
           value={formData.leaves} // Convert the array back to a comma-separated string for display
           onChange={handleInputChange}
@@ -100,7 +100,7 @@ export default function CreateLeavesForm() {
         <input
           type="text"
           name="structure"
-          placeholder="Leaf Structure (comma-separated)"
+          placeholder="Leaf Structure i.e. `address, uint256`"
           className="border border-purple-500 p-1.5 text-purple-400 focus:ring-0 rounded w-2/3 bg-green-200 hover:bg-green-300"
           value={formData.structure} // Convert the array back to a comma-separated string for display
           onChange={handleInputChange}
