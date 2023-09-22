@@ -66,9 +66,9 @@ export default async function createMerkle(leaves, structure) {
   // and an array of strings that describe the leaf variable types
   // leaf consists of `holder`, `tokenId`, `eventId`, `heldUntil`
 
-  console.log("script input:");
-  console.log("leaves:", leaves);
-  console.log("structure:", structure);
+  // console.log("script input:");
+  // console.log("leaves:", leaves);
+  // console.log("structure:", structure);
 
   // ensure the `structure` and `leaves` objects are compatible
   // console.log("firstLeaf:", leaves[0]);
@@ -78,7 +78,7 @@ export default async function createMerkle(leaves, structure) {
     console.log("leaf structure length:", structure.length);
     return;
   }
-  console.log("create the tree");
+  //console.log("create the tree");
   // Create the merkle tree and explicitly state the structure of the leaves
   const tree = StandardMerkleTree.of(leaves, structure);
 

@@ -31,6 +31,7 @@ export default function CreateLeavesForm() {
       //console.log("formData:", formData);
       // fetch merkleData using `createMerkleAPI`
       setIsLoaing(true);
+      setMerkleData(undefined);
       const merkleData = await fetch("/api/createMerkleAPI", {
         method: "POST",
         headers: {
@@ -111,7 +112,7 @@ export default function CreateLeavesForm() {
           Create
         </button>
       </form>
-      {/* Conditionally render the result in a paginated table */}
+      {/* Conditionally render the result */}
       {merkleData && merkleData.success && (
         <div className="mt-4 p-3 border border-purple-700 rounded bg-green-200">
           <h4 className="text-lg font-semibold text-purple-700 mb-2">
@@ -122,7 +123,9 @@ export default function CreateLeavesForm() {
           </div>
         </div>
       )}
-      {isLoading && <div className="text-lg font-semibold">Loading... </div>}
+      {isLoading && (
+        <div className="text-lg text-purple-700 font-semibold">Loading... </div>
+      )}
       {/* Button to copy leaves data to clipboard */}
       {merkleData && merkleData.success && (
         <div className="flex gap-7">

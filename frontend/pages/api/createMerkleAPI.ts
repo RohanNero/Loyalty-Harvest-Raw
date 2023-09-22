@@ -5,8 +5,8 @@ export default async function createLeavesAPI(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  console.log("req:", req.body);
-  console.log("API parameters:");
+  //   console.log("req:", req.body);
+  //   console.log("API parameters:");
 
   const { leaves, structure } = req.body;
   // Clean up the 'leaves' string by removing extra spaces and line breaks
@@ -16,7 +16,7 @@ export default async function createLeavesAPI(
 
   // Split the cleaned 'leaves' string into individual leaf strings
   const leavesArray = cleanedLeaves.split("],[").map((leaf) => `[${leaf}]`);
-  console.log("leavesArray:", leavesArray);
+  //console.log("leavesArray:", leavesArray);
 
   // Manually split each leaf string into an array of values
   const parsedLeavesArray = leavesArray.map((leaf) => {
@@ -32,30 +32,29 @@ export default async function createLeavesAPI(
     // Filter out empty strings (caused by trailing commas inside the leaves object)
     return cleanedValues.filter(Boolean);
   });
-
-  console.log("parsedLeavesArray:", parsedLeavesArray);
+  // This variable is passed to the createMerkle script
+  //console.log("parsedLeavesArray:", parsedLeavesArray);
 
   //   const parsedLeaves = JSON.parse(leaves);
   //   console.log("parsedLeaves:", parsedLeaves);
-  //const parsedLeaves = JSON.parse(JSON.parse(leaves)); // Double parse the leaves string
-  //console.log("parsedLeaves:", parsedLeaves);
 
   //   const parsedStructure = JSON.parse(structure);
   //   console.log("parsedStructure:", parsedStructure);
-  console.log("structure:", structure);
+
   const splitStructure = structure.split(",");
-  console.log("splitStructure:", splitStructure);
-  console.log("leaves:", leaves);
-  console.log("first leaf");
-  console.log(leavesArray[0]);
+  //   console.log("structure:", structure);
+  //   console.log("splitStructure:", splitStructure);
+  //   console.log("leaves:", leaves);
+  //   console.log("first leaf");
+  //   console.log(leavesArray[0]);
 
   try {
     const { tree, root } = await createMerkle(
       parsedLeavesArray,
       splitStructure
     );
-    console.log("merkleData API tree:", tree);
-    console.log("merkleData API root:", root);
+    //console.log("merkleData API tree:", tree);
+    //console.log("merkleData API root:", root);
     res.status(200).json({ success: true, tree, root });
   } catch (error) {
     console.error("Error:", error);

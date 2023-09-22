@@ -237,7 +237,9 @@ export default function CreateLeavesForm() {
           </div>
         </div>
       )}
-      {isLoading && <div className="text-lg font-semibold">Loading... </div>}
+      {isLoading && (
+        <div className="text-lg text-purple-700 font-semibold">Loading... </div>
+      )}
       {/* Button to copy leaves data to clipboard */}
       {leafData && leafData.success && (
         <button
