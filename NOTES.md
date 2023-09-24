@@ -450,3 +450,7 @@ left off working on the home-page
    - api that returns the block a user held until
    - will this api use the merkle tree to view the data? or should we make a call similarly to the `createLeaves` script to view the heldUntil time from the duration? We can either get the data from the chain or from our tree
    - figure out which one is easier and do it
+
+9/24 notes:
+
+1. do the stuff above
